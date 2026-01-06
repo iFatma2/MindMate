@@ -1,0 +1,95 @@
+@model IEnumerable<ZhrCare.Models.Patient>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@* <h1>Index</h1> *@
+@* *@
+@* <p> *@
+@*     <a asp-action="Create">Create New</a> *@
+@* </p> *@
+@* <table class="table"> *@
+@*     <thead> *@
+@*         <tr> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Name) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Age) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.AccessToken) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.CreatedAt) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Caregiver) *@
+@*             </th> *@
+@*             <th></th> *@
+@*         </tr> *@
+@*     </thead> *@
+@*     <tbody> *@
+@* @foreach (var item in Model) { *@
+@*         <tr> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Name) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Age) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.AccessToken) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.CreatedAt) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Caregiver.Id) *@
+@*             </td> *@
+@*             <td> *@
+@*                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
+@*                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+@*                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+@*             </td> *@
+@*         </tr> *@
+@* } *@
+@*     </tbody> *@
+@* </table> *@
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #6c5ce7;">Patient List</h2>
+        <a asp-action="Create" class="btn text-white" style="background-color: #6c5ce7; border-radius: 10px;">
+            + Create New Patient
+        </a>
+    </div>
+
+    <table class="table table-hover shadow-sm" style="border-radius: 15px; overflow: hidden;">
+        <thead style="background-color: #6c5ce7; color: white;">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Created At</th>
+            <th>Operations</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Age</td>
+                
+                <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
