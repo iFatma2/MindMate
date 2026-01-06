@@ -1,18 +1,29 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZhrCare.Data;
+using ZhrCare.Models;
+//using AlzheimerProject.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseSqlite(connectionString));
+// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//
+// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -37,11 +48,11 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.MapRazorPages()
-    .WithStaticAssets();
+   .WithStaticAssets();
 
 app.Run();
