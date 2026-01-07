@@ -29,9 +29,16 @@ namespace ZhrCare.Controllers
         {
 
             var userId = _userManager.GetUserId(User); 
+            var today = DateTime.Today;
+            var dayName = today.DayOfWeek.ToString();
+                
             var patients = await _context.Patients
                 .Where(p => p.CaregiverId == userId)
+                .Include(p => p.Medications)
+                .ThenInclude(m => m.MedicationLogs.Where(l => l.TakenDate.Date == today))
                 .ToListAsync();
+            
+            
             return View(patients);
         }
 
@@ -174,6 +181,54 @@ namespace ZhrCare.Controllers
         private bool PatientExists(int id)
         {
             return _context.Patients.Any(e => e.Id == id);
+        }
+        
+        // Inside PatientsController.cs
+
+        public async Task<IActionResult> Schedule(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var patient = await _context.Patients
+                .Include(p => p.Medications)
+                .ThenInclude(m => m.MedicationLogs)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (patient == null) return NotFound();
+
+            var today = DateTime.Today;
+            var dayOfWeek = today.DayOfWeek.ToString();
+
+            // Logic to filter medications for "Today"
+            var todayMedications = patient.Medications.Where(m =>
+                today >= m.StartDate && today <= m.EndDate &&
+                (m.FrequencyType == "Daily" || 
+                 (m.FrequencyType == "Weekly" && m.SelectedDays != null && m.SelectedDays.Contains(dayOfWeek)))
+            ).ToList();
+
+            ViewBag.PatientName = patient.Name;
+            ViewBag.PatientId = patient.Id;
+
+            return View(todayMedications);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsTaken(int medicationId, int patientId)
+        {
+            var log = new MedicationLog
+            {
+                MedicationId = medicationId,
+                TakenDate = DateTime.Today,
+                TakenTime = DateTime.Now,
+                Status = "Taken"
+            };
+
+            _context.MedicationLogs.Add(log);
+            await _context.SaveChangesAsync();
+
+            // Redirect back to the patient's schedule
+            return RedirectToAction(nameof(Schedule), new { id = patientId });
         }
     }
 }

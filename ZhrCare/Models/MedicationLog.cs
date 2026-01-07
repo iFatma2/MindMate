@@ -1,10 +1,3 @@
-// namespace ZhrCare.Models;
-//
-// public class MedicationLog
-// {
-//     
-// }
-
 using System.ComponentModel.DataAnnotations;
 
 namespace ZhrCare.Models
