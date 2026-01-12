@@ -25,21 +25,29 @@ namespace ZhrCare.Controllers
             _userManager = userManager;
         }
 
-        // GET: Medications
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? selectedPatientId)
         {
-            //
             var userId = _userManager.GetUserId(User);
-
-            var medications = await _context.Medications
-                .Include(m => m.Patient)
-                .Where(m => m.Patient.CaregiverId == userId)
+    
+            ViewBag.AllPatients = await _context.Patients
+                .Where(p => p.CaregiverId == userId)
                 .ToListAsync();
+        
+            ViewBag.SelectedPatientId = selectedPatientId;
+
+            var query = _context.Medications
+                .Include(m => m.Patient)
+                .Where(m => m.Patient.CaregiverId == userId);
+
+            if (selectedPatientId.HasValue)
+            {
+                query = query.Where(m => m.PatientId == selectedPatientId);
+            }
+
+            var medications = await query.ToListAsync();
 
             return View(medications);
         }
-
-        // GET: Medications/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

@@ -1,283 +1,90 @@
-@* $1$ @model ZhrCare.Models.Medication #1# *@
-@* $1$ #1# *@
-@* $1$ @{ #1# *@
-@* $1$     ViewData["Title"] = "Create"; #1# *@
-@* $1$ } #1# *@
-@* $1$ #1# *@
-@* $1$ <h1>Create</h1> #1# *@
-@* $1$ #1# *@
-@* $1$ <h4>Medication</h4> #1# *@
-@* $1$ <hr /> #1# *@
-@* $1$ <div class="row"> #1# *@
-@* $1$     <div class="col-md-4"> #1# *@
-@* $1$         <form asp-action="Create"> #1# *@
-@* $1$             <div asp-validation-summary="ModelOnly" class="text-danger"></div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="PatientId" class="control-label"></label> #1# *@
-@* $1$                 <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.PatientId"></select> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="Name" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="Name" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="Name" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="Dosage" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="Dosage" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="Dosage" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="FrequencyType" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="FrequencyType" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="FrequencyType" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="SelectedDays" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="SelectedDays" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="SelectedDays" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="ScheduledTime" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="ScheduledTime" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="ScheduledTime" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="StartDate" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="StartDate" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="StartDate" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <label asp-for="EndDate" class="control-label"></label> #1# *@
-@* $1$                 <input asp-for="EndDate" class="form-control" /> #1# *@
-@* $1$                 <span asp-validation-for="EndDate" class="text-danger"></span> #1# *@
-@* $1$             </div> #1# *@
-@* $1$             <div class="form-group"> #1# *@
-@* $1$                 <input type="submit" value="Create" class="btn btn-primary" /> #1# *@
-@* $1$             </div> #1# *@
-@* $1$         </form> #1# *@
-@* $1$     </div> #1# *@
-@* $1$ </div> #1# *@
-@* $1$ #1# *@
-@* $1$ <div> #1# *@
-@* $1$     <a asp-action="Index">Back to List</a> #1# *@
-@* $1$ </div> #1# *@
-@* $1$ #1# *@
-@* $1$ @section Scripts { #1# *@
-@* $1$     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} #1# *@
-@* $1$ } #1# *@
-@* *@
-@* @model ZhrCare.Models.Medication *@
-@* *@
-@* @{ *@
-@*     ViewData["Title"] = "Create Medication"; *@
-@* } *@
-@* *@
-@* <div class="container mt-4"> *@
-@*     <div class="row justify-content-center"> *@
-@*         <div class="col-md-10 shadow-sm p-4 bg-white rounded border"> *@
-@*             <h2 class="text-primary mb-4">Create Medication</h2> *@
-@*             <form asp-action="Create"> *@
-@*                 <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
-@*                  *@
-@*                 <div class="row"> *@
-@*                     <div class="col-md-6"> *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="PatientId" class="fw-bold"></label> *@
-@*                             <select asp-for="PatientId" class="form-select" asp-items="ViewBag.PatientId"> *@
-@*                                 <option value="">-- Select Patient --</option> *@
-@*                             </select> *@
-@*                         </div> *@
-@*                          *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="Name" class="fw-bold"></label> *@
-@*                             <input asp-for="Name" class="form-control" placeholder="Enter medication name" /> *@
-@*                         </div> *@
-@* *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="FrequencyType" class="fw-bold"></label> *@
-@*                             <select asp-for="FrequencyType" id="FrequencyType" class="form-select"> *@
-@*                                 <option value="Daily">Daily</option> *@
-@*                                 <option value="Weekly">Weekly</option> *@
-@*                                 <option value="Monthly">Monthly</option> *@
-@*                             </select> *@
-@*                         </div> *@
-@* *@
-@*                         <div class="form-group mb-3" id="weeklyDaysSection" style="display:none;"> *@
-@*                             <label class="fw-bold d-block mb-2">Select Days</label> *@
-@*                             <div class="d-flex flex-wrap gap-2 p-2 border rounded bg-light"> *@
-@*                                 @{ *@
-@*                                     var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" }; *@
-@*                                     foreach (var day in days) *@
-@*                                     { *@
-@*                                         <div class="form-check"> *@
-@*                                             <input class="form-check-input day-checkbox" type="checkbox" value="@day" id="day_@day"> *@
-@*                                             <label class="form-check-label" for="day_@day">@day</label> *@
-@*                                         </div> *@
-@*                                     } *@
-@*                                 } *@
-@*                             </div> *@
-@*                             <input type="hidden" asp-for="SelectedDays" id="SelectedDaysHidden" /> *@
-@*                         </div> *@
-@* *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="ScheduledTime" class="fw-bold"></label> *@
-@*                             <input asp-for="ScheduledTime" type="time" class="form-control" /> *@
-@*                         </div> *@
-@*                     </div> *@
-@* *@
-@*                     <div class="col-md-6"> *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="Dosage" class="fw-bold"></label> *@
-@*                             <input asp-for="Dosage" class="form-control" placeholder="e.g., 500mg" /> *@
-@*                         </div> *@
-@*                          *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="StartDate" class="fw-bold"></label> *@
-@*                             <input asp-for="StartDate" type="date" class="form-control" /> *@
-@*                         </div> *@
-@*                          *@
-@*                         <div class="form-group mb-3"> *@
-@*                             <label asp-for="EndDate" class="fw-bold"></label> *@
-@*                             <input asp-for="EndDate" type="date" class="form-control" /> *@
-@*                         </div> *@
-@*                     </div> *@
-@*                 </div> *@
-@* *@
-@*                 <div class="text-center mt-4"> *@
-@*                     <input type="submit" value="Save Medication" class="btn btn-primary btn-lg px-5" /> *@
-@*                     <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5">Back</a> *@
-@*                 </div> *@
-@*             </form> *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* @section Scripts { *@
-@*     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} *@
-@*     <script> *@
-@*         $(document).ready(function () { *@
-@*             function updateSelectedDays() { *@
-@*                 var selectedDays = []; *@
-@*                 $('.day-checkbox:checked').each(function () { *@
-@*                     selectedDays.push($(this).val()); *@
-@*                 }); *@
-@*                 $('#SelectedDaysHidden').val(selectedDays.join(', ')); *@
-@*             } *@
-@* *@
-@*             $('.day-checkbox').on('change', function () { *@
-@*                 updateSelectedDays(); *@
-@*             }); *@
-@* *@
-@*             $('#FrequencyType').on('change', function () { *@
-@*                 if ($(this).val() === 'Weekly') { *@
-@*                     $('#weeklyDaysSection').slideDown(); *@
-@*                 } else { *@
-@*                     $('#weeklyDaysSection').slideUp(); *@
-@*                     $('.day-checkbox').prop('checked', false);  *@
-@*                     updateSelectedDays(); *@
-@*                 } *@
-@*             }); *@
-@*         }); *@
-@*     </script> *@
-@* } *@
-
-
 @model ZhrCare.Models.Medication
+@{ ViewData["Title"] = "Add Medication"; }
 
-@{
-    ViewData["Title"] = "Create Medication";
-}
+<div class="zhr-page-wrapper">
+    <div class="container">
+        <h1 class="zhr-hero-title">Add Medication</h1>
+        <p class="zhr-subtitle">Establish a new dosage schedule</p>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow border-0" style="border-radius: 15px;">
-                <div class="card-header text-white text-center" style="background-color: #6c5ce7; border-radius: 15px 15px 0 0;">
-                    <h4 class="mb-0">💊 Add New Medication</h4>
-                </div>
+        <div class="zhr-card mx-auto" style="max-width: 900px;">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <label asp-for="PatientId" class="zhr-label">Select Patient</label>
+                            <select asp-for="PatientId" class="form-select zhr-input" asp-items="ViewBag.PatientId">
+                                <option value="">-- Choose Patient --</option>
+                            </select>
+                            <span asp-validation-for="PatientId" class="text-danger small"></span>
+                        </div>
 
-                <div class="card-body p-4">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="mb-4">
+                            <label asp-for="Name" class="zhr-label">Medication Name</label>
+                            <input asp-for="Name" class="form-control zhr-input" placeholder="e.g. Panadol" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="FrequencyType" class="zhr-label">Frequency</label>
+                            <select asp-for="FrequencyType" id="FrequencyType" class="form-select zhr-input">
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4" id="weeklyDaysSection" style="display:none;">
+                            <label class="zhr-label">Select Weekly Days</label>
+                            <div class="d-flex flex-wrap gap-2 p-3 border rounded-3 bg-light">
+                                @{
+                                    var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                                    foreach (var day in days) {
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input day-checkbox" type="checkbox" value="@day" id="day_@day">
+                                            <label class="form-check-label small" for="day_@day">@day</label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <input type="hidden" asp-for="SelectedDays" id="SelectedDaysHidden" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <label asp-for="Dosage" class="zhr-label">Dosage</label>
+                            <input asp-for="Dosage" class="form-control zhr-input" placeholder="e.g. 500mg" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ScheduledTime" class="zhr-label">Dose Time</label>
+                            <input asp-for="ScheduledTime" type="time" class="form-control zhr-input" />
+                        </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="PatientId" class="form-label fw-bold">Select Patient</label>
-                                    <select asp-for="PatientId" class="form-select" asp-items="ViewBag.PatientId">
-                                        <option value="">-- Choose a Patient --</option>
-                                    </select>
-                                    <span asp-validation-for="PatientId" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="Name" class="form-label fw-bold">Medication Name</label>
-                                    <input asp-for="Name" class="form-control" placeholder="e.g., Panadol" />
-                                    <span asp-validation-for="Name" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="FrequencyType" class="form-label fw-bold">Frequency</label>
-                                    <select asp-for="FrequencyType" id="FrequencyType" class="form-select">
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                    </select>
-                                    <span asp-validation-for="FrequencyType" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3" id="weeklyDaysSection" style="display:none;">
-                                    <label class="form-label fw-bold d-block mb-2">Select Days</label>
-                                    <div class="d-flex flex-wrap gap-2 p-2 border rounded bg-light">
-                                        @{
-                                            var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-                                            foreach (var day in days)
-                                            {
-                                                <div class="form-check">
-                                                    <input class="form-check-input day-checkbox" type="checkbox" value="@day" id="day_@day">
-                                                    <label class="form-check-label small" for="day_@day">@day</label>
-                                                </div>
-                                            }
-                                        }
-                                    </div>
-                                    <input type="hidden" asp-for="SelectedDays" id="SelectedDaysHidden" />
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="ScheduledTime" class="form-label fw-bold">Dose Time</label>
-                                    <input asp-for="ScheduledTime" type="time" class="form-control" />
-                                    <span asp-validation-for="ScheduledTime" class="text-danger"></span>
+                            <div class="col-6">
+                                <div class="mb-4">
+                                    <label asp-for="StartDate" class="zhr-label">Start Date</label>
+                                    <input asp-for="StartDate" type="date" class="form-control zhr-input" />
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Dosage" class="form-label fw-bold">Dosage</label>
-                                    <input asp-for="Dosage" class="form-control" placeholder="e.g., 500mg or 2 pills" />
-                                    <span asp-validation-for="Dosage" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
-                                    <input asp-for="StartDate" type="date" class="form-control" />
-                                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
-                                    <input asp-for="EndDate" type="date" class="form-control" />
-                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                            <div class="col-6">
+                                <div class="mb-4">
+                                    <label asp-for="EndDate" class="zhr-label">End Date</label>
+                                    <input asp-for="EndDate" type="date" class="form-control zhr-input" />
                                 </div>
                             </div>
                         </div>
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn text-white btn-lg" style="background-color: #6c5ce7;">Save Medication</button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-zhr-main flex-grow-1">Save Medication</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -288,24 +95,13 @@
         $(document).ready(function () {
             function updateSelectedDays() {
                 var selectedDays = [];
-                $('.day-checkbox:checked').each(function () {
-                    selectedDays.push($(this).val());
-                });
+                $('.day-checkbox:checked').each(function () { selectedDays.push($(this).val()); });
                 $('#SelectedDaysHidden').val(selectedDays.join(', '));
             }
-
-            $('.day-checkbox').on('change', function () {
-                updateSelectedDays();
-            });
-
+            $('.day-checkbox').on('change', function () { updateSelectedDays(); });
             $('#FrequencyType').on('change', function () {
-                if ($(this).val() === 'Weekly') {
-                    $('#weeklyDaysSection').slideDown();
-                } else {
-                    $('#weeklyDaysSection').slideUp();
-                    $('.day-checkbox').prop('checked', false); 
-                    updateSelectedDays();
-                }
+                if ($(this).val() === 'Weekly') { $('#weeklyDaysSection').slideDown(); } 
+                else { $('#weeklyDaysSection').slideUp(); $('.day-checkbox').prop('checked', false); updateSelectedDays(); }
             });
         });
     </script>

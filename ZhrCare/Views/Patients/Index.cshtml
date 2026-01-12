@@ -1,188 +1,76 @@
 @model IEnumerable<ZhrCare.Models.Patient>
+@{ ViewData["Title"] = "Patient List"; }
 
-@{
-    ViewData["Title"] = "Patient List";
-}
+<div class="zhr-page-wrapper">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h1 class="zhr-hero-title text-start mb-0">Patient List</h1>
+                <p class="text-muted mb-0">Manage and monitor your care circle</p>
+            </div>
+            <a asp-action="Create" class="btn btn-zhr-main">
+                <i class="bi bi-person-plus"></i> New Patient
+            </a>
+        </div>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 style="color: #6c5ce7; font-weight: bold;"><i class="bi bi-people-fill"></i> Patient List</h2>
-        <a asp-action="Create" class="btn text-white shadow-sm px-4" style="background-color: #6c5ce7; border-radius: 10px;">
-            <i class="bi bi-person-plus"></i> Create New Patient
-        </a>
-    </div>
-
-    <div class="card shadow border-0" style="border-radius: 15px; overflow: hidden;">
-        <div class="table-responsive">
+        <div class="zhr-card p-0 overflow-hidden">
             <table class="table table-hover mb-0">
-                <thead style="background-color: #f1f0ff; color: #6c5ce7;">
-                    <tr>
-                        <th class="py-3 px-4 border-0">Name</th>
-                        <th class="py-3 border-0">Age</th>
-                        <th class="py-3 border-0">Created At</th>
-                        <th class="py-3 border-0 text-center">Operations</th>
-                    </tr>
+                <thead class="bg-light">
+                <tr>
+                    <th class="py-3 px-4 border-0">PATIENT NAME</th>
+                    <th class="py-3 border-0">AGE</th>
+                    <th class="py-3 border-0 text-end px-4">OPERATIONS</th>
+                </tr>
                 </thead>
-                <tbody>
-                    @if (!Model.Any())
-                    {
-                        <tr>
-                            <td colspan="4" class="text-center py-5 text-muted">
-                                <i class="bi bi-person-exclamation" style="font-size: 2rem;"></i>
-                                <p class="mt-2">No patients added yet.</p>
-                            </td>
-                        </tr>
-                    }
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="py-3 px-4 align-middle fw-bold" style="color: #2d3436;">
-                                @item.Name
-                            </td>
-                            <td class="py-3 align-middle text-secondary">
-                                <span class="badge rounded-pill bg-light text-dark border">@item.Age Years</span>
-                            </td>
-                            <td class="py-3 align-middle text-muted">
-                                <i class="bi bi-calendar3 small"></i> @item.CreatedAt.ToString("dd MMM yyyy")
-                            </td>
-                            <td class="py-3 align-middle text-center">
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm" style="color: #6c5ce7; background-color: #f1f0ff; border-radius: 8px; width: 80px;">
-                                        <i class="bi bi-pencil-square"></i> Edit
-                                    </a>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm" style="color: #0fbcf9; background-color: #e0f7ff; border-radius: 8px; width: 80px;">
-                                        <i class="bi bi-info-circle"></i> Info
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm" style="color: #ff5e57; background-color: #fff0ef; border-radius: 8px; width: 80px;">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
-                                    <a asp-action="Schedule" asp-route-id="@item.Id" class="btn btn-sm"
-                                       style="color: #6c5ce7; background-color: #f1f0ff; border-radius: 8px; width: 100px;">
-                                        <i class="bi bi-calendar-check"></i> Schedule
-                                    </a>
-                                    <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@item.Id" 
-                                       class="btn btn-sm shadow-sm" 
-                                       style="background-color: #f8f9fa; color: #6c5ce7; border: 1px solid #6c5ce7; border-radius: 10px; padding: 5px 12px;">
-                                        <i class="bi bi-person-video"></i> Memories
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center py-5 text-muted">
+                                    <i class="bi bi-person-exclamation fs-1 d-block mb-3 opacity-25"></i>
+                                    <p>No patients added yet.</p>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="py-4 px-4 align-middle fw-bold" style="color: var(--zhr-dark);">
+                                    @item.Name
+                                </td>
+                                <td class="py-4 align-middle">
+                                    <span class="badge bg-light text-dark border-0 px-3 py-2" style="border-radius: 8px;">@item.Age Years</span>
+                                </td>
+                                <td class="py-4 align-middle text-end px-4">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light rounded-pill px-3" title="Edit">
+                                            <i class="bi bi-pencil-square me-1"></i> Edit
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light rounded-pill px-3" title="Info">
+                                            <i class="bi bi-info-circle me-1"></i> Info
+                                        </a>
+                                        
+                                        <a asp-action="Schedule" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3" 
+                                           style="border-color: var(--zhr-brand); color: var(--zhr-brand);">
+                                            <i class="bi bi-calendar-check me-1"></i> Schedule
+                                        </a>
+                                        <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@item.Id" 
+                                           class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                            <i class="bi bi-person-video me-1"></i> Memories
+                                        </a>
+
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                        <a asp-action="PatientDashboard" asp-route-id="@item.Id" class="btn-action-circle" title="View Patient Dashboard">
+                                            <i class="bi bi-speedometer2" style="color: var(--zhr-brand);"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
             </table>
         </div>
     </div>
 </div>
-
-@* $1$ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"> #1# *@
-@* @model IEnumerable<ZhrCare.Models.Patient> *@
-@* *@
-@* @{ *@
-@*     ViewData["Title"] = "Dashboard"; *@
-@*     var today = DateTime.Today; *@
-@*     var dayName = today.DayOfWeek.ToString(); *@
-@* } *@
-@* *@
-@* <div class="container mt-4"> *@
-@*     <div class="d-flex justify-content-between align-items-center mb-4"> *@
-@*         <h2 style="color: #6c5ce7; font-weight: bold;"><i class="bi bi-people-fill"></i> Patient List</h2> *@
-@*         <a asp-action="Create" class="btn text-white shadow-sm px-4" style="background-color: #6c5ce7; border-radius: 10px;"> *@
-@*             <i class="bi bi-person-plus"></i> Add New Patient *@
-@*         </a> *@
-@*     </div> *@
-@* *@
-@*     <div class="card shadow border-0 mb-5" style="border-radius: 15px; overflow: hidden;"> *@
-@*         <div class="table-responsive"> *@
-@*             <table class="table table-hover mb-0"> *@
-@*                 <thead style="background-color: #f1f0ff; color: #6c5ce7;"> *@
-@*                     <tr> *@
-@*                         <th class="py-3 px-4 border-0">Name</th> *@
-@*                         <th class="py-3 border-0">Age</th> *@
-@*                         <th class="py-3 border-0 text-center">Operations</th> *@
-@*                     </tr> *@
-@*                 </thead> *@
-@*                 <tbody> *@
-@*                     @foreach (var item in Model) *@
-@*                     { *@
-@*                         <tr> *@
-@*                             <td class="py-3 px-4 align-middle fw-bold">@item.Name</td> *@
-@*                             <td class="py-3 align-middle text-secondary">@item.Age Years</td> *@
-@*                             <td class="py-3 align-middle text-center"> *@
-@*                                 <div class="d-flex justify-content-center gap-2"> *@
-@*                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm" style="color: #6c5ce7; background-color: #f1f0ff; border-radius: 8px;">Edit</a> *@
-@*                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm" style="color: #0fbcf9; background-color: #e0f7ff; border-radius: 8px;">Info</a> *@
-@*                                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm" style="color: #ff5e57; background-color: #fff0ef; border-radius: 8px;">Delete</a> *@
-@*                                 </div> *@
-@*                             </td> *@
-@*                         </tr> *@
-@*                     } *@
-@*                 </tbody> *@
-@*             </table> *@
-@*         </div> *@
-@*     </div> *@
-@* *@
-@*     <hr class="my-5" style="border-top: 2px dashed #dee2e6;" /> *@
-@* *@
-@*     <div class="mb-4"> *@
-@*         <h3 style="color: #2d3436; font-weight: 700;"> *@
-@*             <i class="bi bi-clock-history text-primary"></i> Today's Medication Schedule *@
-@*             <small class="text-muted fs-6 fw-normal ms-2">@today.ToString("dddd, dd MMM")</small> *@
-@*         </h3> *@
-@*     </div> *@
-@* *@
-@*     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"> *@
-@*         @foreach (var patient in Model) *@
-@*         { *@
-@*             // فلترة الأدوية التي يجب أخذها اليوم بناءً على نوع التكرار والتاريخ *@
-@*             var medsToday = patient.Medications.Where(m => *@
-@*                 today.Date >= m.StartDate.Date && today.Date <= m.EndDate.Date && *@
-@*                 (m.FrequencyType == "Daily" || (m.FrequencyType == "Weekly" && m.SelectedDays != null && m.SelectedDays.Contains(dayName))) *@
-@*             ).ToList(); *@
-@* *@
-@*             foreach (var med in medsToday) *@
-@*             { *@
-@*                 // فحص إذا كان هناك سجل لهذا الدواء بتاريخ اليوم *@
-@*                 var isTaken = med.MedicationLogs.Any(l => l.TakenDate.Date == today.Date); *@
-@* *@
-@*                 <div class="col"> *@
-@*                     <div class="card h-100 shadow-sm border-0"  *@
-@*                          style="border-radius: 12px; border-left: 5px solid @(isTaken ? "#2ecc71" : "#6c5ce7") !important; background-color: @(isTaken ? "#f8fff9" : "#fff");"> *@
-@*                         <div class="card-body p-3"> *@
-@*                             <div class="d-flex justify-content-between align-items-start"> *@
-@*                                 <div> *@
-@*                                     <h6 class="fw-bold mb-0">@med.Name</h6> *@
-@*                                     <small class="text-muted">Patient: @patient.Name</small> *@
-@*                                 </div> *@
-@*                                 <span class="badge @(isTaken ? "bg-success" : "bg-light text-dark border") rounded-pill"> *@
-@*                                     <i class="bi bi-clock"></i> @med.ScheduledTime.ToString("hh:mm tt") *@
-@*                                 </span> *@
-@*                             </div> *@
-@* *@
-@*                             <div class="mt-2 small text-secondary"> *@
-@*                                 <i class="bi bi-capsule"></i> Dose: @med.Dosage *@
-@*                             </div> *@
-@* *@
-@*                             @if (!isTaken) *@
-@*                             { *@
-@*                                 <form asp-action="MarkAsTaken" method="post" class="mt-3"> *@
-@*                                     @Html.AntiForgeryToken() *@
-@*                                     <input type="hidden" name="medicationId" value="@med.Id" /> *@
-@*                                     <button type="submit" class="btn btn-sm w-100 text-white" style="background-color: #6c5ce7; border-radius: 8px;"> *@
-@*                                         Mark as Taken *@
-@*                                     </button> *@
-@*                                 </form> *@
-@*                             } *@
-@*                             else *@
-@*                             { *@
-@*                                 <div class="text-success small mt-3 fw-bold text-center"> *@
-@*                                     <i class="bi bi-check-circle-fill"></i> Medication Taken *@
-@*                                 </div> *@
-@*                             } *@
-@*                         </div> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             } *@
-@*         } *@
-@*     </div> *@
-@* </div> *@

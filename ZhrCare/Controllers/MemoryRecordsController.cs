@@ -27,19 +27,19 @@ namespace ZhrCare.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
+            var allPatients = await _context.Patients
+                .Where(p => p.CaregiverId == userId)
+                .ToListAsync();
+            ViewBag.AllPatients = allPatients;
+
             if (patientId == null)
             {
-                var firstPatient = await _context.Patients
-                    .FirstOrDefaultAsync(p => p.CaregiverId == userId);
-            
+                var firstPatient = allPatients.FirstOrDefault();
                 if (firstPatient == null) return View(new List<MemoryRecord>()); 
-        
                 patientId = firstPatient.Id;
             }
 
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(p => p.Id == patientId && p.CaregiverId == userId);
-
+            var patient = allPatients.FirstOrDefault(p => p.Id == patientId);
             if (patient == null) return NotFound();
 
             var records = await _context.MemoryRecords
@@ -48,11 +48,11 @@ namespace ZhrCare.Controllers
                 .ToListAsync();
 
             ViewBag.PatientName = patient.Name;
-            ViewBag.PatientId = patient.Id;
+            ViewBag.PatientId = patient.Id; 
+
             return View(records);
         }
-
-        // GET: MemoryRecords/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();

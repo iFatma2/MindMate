@@ -1,41 +1,31 @@
 @model ZhrCare.Models.MemoryRecord
+@{ ViewData["Title"] = "Memory Details"; }
 
-@{
-    ViewData["Title"] = "Memory Details";
-}
+<div class="zhr-page-wrapper">
+    <div class="container">
+        <h1 class="zhr-hero-title">Memory Details</h1>
+        <p class="zhr-subtitle">Shared on @Model.CreatedAt.ToString("f")</p>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0" style="border-radius: 20px; overflow: hidden;">
-                @if (!string.IsNullOrEmpty(Model.ImagePath))
-                {
-                    <img src="~/uploads/images/@Model.ImagePath" class="img-fluid" style="width: 100%; max-height: 400px; object-fit: cover;" />
-                }
+        <div class="zhr-card mx-auto p-0 overflow-hidden shadow-lg" style="max-width: 800px;">
+            @if (!string.IsNullOrEmpty(Model.ImagePath)) {
+                <img src="~/uploads/images/@Model.ImagePath" class="w-100" style="max-height: 500px; object-fit: cover;" />
+            }
+            
+            <div class="p-5 text-center">
+                <h2 class="mb-4 fw-bold" style="font-family: var(--font-heading); font-size: 36px;">@Model.Caption</h2>
                 
-                <div class="card-body p-4 text-center">
-                    <h3 style="color: #6c5ce7; font-weight: 700;">@Model.Caption</h3>
-                    <p class="text-muted small">Recorded on: @Model.CreatedAt.ToString("f")</p>
-                    
-                    @if (!string.IsNullOrEmpty(Model.AudioPath))
-                    {
-                        <div class="bg-light p-4 rounded-pill mt-4">
-                            <label class="d-block mb-2 fw-bold text-secondary"><i class="bi bi-volume-up-fill"></i> Voice Message</label>
-                            <audio controls class="w-100">
-                                <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        </div>
-                    }
-
-                    <div class="mt-5 d-flex justify-content-center gap-3">
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn text-white px-4" style="background-color: #6c5ce7; border-radius: 10px;">
-                            <i class="bi bi-pencil-square"></i> Edit
-                        </a>
-                        <a asp-action="Index" asp-route-patientId="@Model.PatientId" class="btn btn-outline-secondary px-4" style="border-radius: 10px;">
-                            <i class="bi bi-arrow-left"></i> Back to Gallery
-                        </a>
+                @if (!string.IsNullOrEmpty(Model.AudioPath)) {
+                    <div class="zhr-bg-light p-4 rounded-pill d-inline-block w-100 mb-4" style="background-color: var(--zhr-bg-light);">
+                        <label class="d-block mb-2 small fw-bold text-muted"><i class="bi bi-mic-fill"></i> Voice Recording</label>
+                        <audio controls class="w-100">
+                            <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg">
+                        </audio>
                     </div>
+                }
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-zhr-main px-5">Edit</a>
+                    <a asp-action="Index" asp-route-patientId="@Model.PatientId" class="btn btn-outline-secondary rounded-pill px-5">Gallery</a>
                 </div>
             </div>
         </div>

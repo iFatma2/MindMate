@@ -1,99 +1,40 @@
-@* @model ZhrCare.Models.Routine *@
-@* *@
-@* @{ *@
-@*     ViewData["Title"] = "Create"; *@
-@* } *@
-@* *@
-@* <h1>Create</h1> *@
-@* *@
-@* <h4>Routine</h4> *@
-@* <hr /> *@
-@* <div class="row"> *@
-@*     <div class="col-md-4"> *@
-@*         <form asp-action="Create"> *@
-@*             <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
-@*             <div class="form-group"> *@
-@*                 <label asp-for="PatientId" class="control-label"></label> *@
-@*                 <select asp-for="PatientId" class ="form-control" asp-items="ViewBag.PatientId"></select> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <label asp-for="ActivityName" class="control-label"></label> *@
-@*                 <input asp-for="ActivityName" class="form-control" /> *@
-@*                 <span asp-validation-for="ActivityName" class="text-danger"></span> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <label asp-for="Time" class="control-label"></label> *@
-@*                 <input asp-for="Time" class="form-control" /> *@
-@*                 <span asp-validation-for="Time" class="text-danger"></span> *@
-@*             </div> *@
-@*             <div class="form-group form-check"> *@
-@*                 <label class="form-check-label"> *@
-@*                     <input class="form-check-input" asp-for="IsCompleted" /> @Html.DisplayNameFor(model => model.IsCompleted) *@
-@*                 </label> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <input type="submit" value="Create" class="btn btn-primary" /> *@
-@*             </div> *@
-@*         </form> *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* <div> *@
-@*     <a asp-action="Index">Back to List</a> *@
-@* </div> *@
-@* *@
-@* @section Scripts { *@
-@*     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} *@
-@* } *@
-
 @model ZhrCare.Models.Routine
+@{ ViewData["Title"] = "Add Routine"; }
 
-@{
-    ViewData["Title"] = "Create Routine";
-}
+<div class="zhr-page-wrapper">
+    <div class="container">
+        <h1 class="zhr-hero-title">Add New Activity</h1>
+        <p class="zhr-subtitle">Schedule a daily routine for the patient</p>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-0" style="border-radius: 15px;">
-                <div class="card-header text-white text-center" style="background-color: #6c5ce7; border-radius: 15px 15px 0 0;">
-                    <h4 class="mb-0">➕ Add New Routine</h4>
+        <div class="zhr-card mx-auto" style="max-width: 500px;">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                <div class="mb-4">
+                    <label asp-for="PatientId" class="zhr-label">Select Patient</label>
+                    <select asp-for="PatientId" class="form-select zhr-input" asp-items="ViewBag.PatientId">
+                        <option value="">-- Choose a Patient --</option>
+                    </select>
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="PatientId" class="form-label fw-bold">Select Patient</label>
-                            <select asp-for="PatientId" class="form-select" asp-items="ViewBag.PatientId">
-                                <option value="">-- Choose a Patient --</option>
-                            </select>
-                            <span asp-validation-for="PatientId" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label asp-for="ActivityName" class="form-label fw-bold">Activity Name</label>
-                            <input asp-for="ActivityName" class="form-control" placeholder="e.g., Morning Medicine" />
-                            <span asp-validation-for="ActivityName" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label asp-for="Time" class="form-label fw-bold">Schedule Date & Time</label>
-                            <input asp-for="Time" type="datetime-local" class="form-control" />
-                            <span asp-validation-for="Time" class="text-danger"></span>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn text-white" style="background-color: #6c5ce7;">Save Routine</button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-                        </div>
-                    </form>
+                <div class="mb-4">
+                    <label asp-for="ActivityName" class="zhr-label">Activity Name</label>
+                    <input asp-for="ActivityName" class="form-control zhr-input" placeholder="e.g., Morning Walk" />
                 </div>
-            </div>
+
+                <div class="mb-4">
+                    <label asp-for="Time" class="zhr-label">Date & Time</label>
+                    <input asp-for="Time" type="datetime-local" class="form-control zhr-input" />
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-zhr-main flex-grow-1">Save Routine</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

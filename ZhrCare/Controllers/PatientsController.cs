@@ -108,43 +108,42 @@ namespace ZhrCare.Controllers
             return View(patient);
         }
 
-        // POST: Patients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Age,AccessToken,CreatedAt,CaregiverId")] Patient patient)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Age")] Patient patient)
         {
-            if (id != patient.Id)
-            {
-                return NotFound();
-            }
+            if (id != patient.Id) return NotFound();
+
+            ModelState.Remove("CaregiverId");
+            ModelState.Remove("AccessToken");
+            ModelState.Remove("CreatedAt");
+            ModelState.Remove("Caregiver"); // إذا كان هناك Navigation Property
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(patient);
+                    var patientToUpdate = await _context.Patients.FindAsync(id);
+                    if (patientToUpdate == null) return NotFound();
+
+                    patientToUpdate.Name = patient.Name;
+                    patientToUpdate.Age = patient.Age;
+
+                    _context.Update(patientToUpdate);
                     await _context.SaveChangesAsync();
+            
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PatientExists(patient.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!PatientExists(patient.Id)) return NotFound();
+                    else throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["CaregiverId"] = new SelectList(_context.Users, "Id", "Id", patient.CaregiverId);
+    
             return View(patient);
         }
-
-        // GET: Patients/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -183,8 +182,6 @@ namespace ZhrCare.Controllers
             return _context.Patients.Any(e => e.Id == id);
         }
         
-        // Inside PatientsController.cs
-
         public async Task<IActionResult> Schedule(int? id)
         {
             if (id == null) return NotFound();
@@ -211,24 +208,66 @@ namespace ZhrCare.Controllers
 
             return View(todayMedications);
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsTaken(int medicationId, int patientId)
         {
-            var log = new MedicationLog
+            var today = DateTime.Today;
+
+            var existingLog = await _context.MedicationLogs
+                .FirstOrDefaultAsync(l => l.MedicationId == medicationId && l.TakenDate.Date == today);
+
+            if (existingLog != null)
             {
-                MedicationId = medicationId,
-                TakenDate = DateTime.Today,
-                TakenTime = DateTime.Now,
-                Status = "Taken"
+                _context.MedicationLogs.Remove(existingLog);
+            }
+            else
+            {
+                var log = new MedicationLog
+                {
+                    MedicationId = medicationId,
+                    TakenDate = today,
+                    TakenTime = DateTime.Now,
+                    Status = "Taken"
+                };
+                _context.MedicationLogs.Add(log);
+            }
+
+            await _context.SaveChangesAsync(); 
+            
+            string returnUrl = Request.Headers["Referer"].ToString();
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            
+            return RedirectToAction(nameof(Index));
+        }
+        
+        
+        public async Task<IActionResult> PatientDashboard(int id)
+        {
+            var patient = await _context.Patients
+                .Include(p => p.Medications)
+                .ThenInclude(m => m.MedicationLogs)
+                .Include(p => p.Routines)
+                .Include(p => p.MemoryRecords) 
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (patient == null) return NotFound();
+
+            var viewModel = new PatientDashboardViewModel
+            {
+                PatientId = patient.Id,
+                PatientName = patient.Name,
+                Medications = patient.Medications.ToList(),
+                Routines = patient.Routines.ToList(),
+                Memories = patient.MemoryRecords.ToList() 
             };
 
-            _context.MedicationLogs.Add(log);
-            await _context.SaveChangesAsync();
-
-            // Redirect back to the patient's schedule
-            return RedirectToAction(nameof(Schedule), new { id = patientId });
+            return View(viewModel);
         }
     }
 }

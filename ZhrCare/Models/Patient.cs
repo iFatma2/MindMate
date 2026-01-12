@@ -22,7 +22,8 @@ namespace ZhrCare.Models
         [ForeignKey("CaregiverId")]
         public ApplicationUser Caregiver { get; set; }
         
-        // داخل كلاس Patient.cs
         public virtual ICollection<Medication> Medications { get; set; } = new List<Medication>();
+        public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>();
+        public virtual ICollection<MemoryRecord> MemoryRecords { get; set; } = new List<MemoryRecord>();
     }
 }

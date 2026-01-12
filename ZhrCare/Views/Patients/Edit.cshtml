@@ -1,54 +1,39 @@
 @model ZhrCare.Models.Patient
+@{ ViewData["Title"] = "Edit Patient"; }
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<div class="zhr-page-wrapper">
+    <div class="container">
+        <h1 class="zhr-hero-title">Edit Patient</h1>
+        <p class="zhr-subtitle">Update information for @Model.Name</p>
 
-<h1>Edit</h1>
+        <div class="zhr-card shadow-sm mx-auto" style="max-width: 600px;">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CaregiverId" />
+                <input type="hidden" asp-for="AccessToken" />
+                <input type="hidden" asp-for="CreatedAt" />
+                
+                <div class="mb-4">
+                    <label asp-for="Name" class="zhr-label">Full Name</label>
+                    <input asp-for="Name" class="form-control zhr-input" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
 
-<h4>Patient</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AccessToken" class="control-label"></label>
-                <input asp-for="AccessToken" class="form-control" />
-                <span asp-validation-for="AccessToken" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CaregiverId" class="control-label"></label>
-                <select asp-for="CaregiverId" class="form-control" asp-items="ViewBag.CaregiverId"></select>
-                <span asp-validation-for="CaregiverId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-4">
+                    <label asp-for="Age" class="zhr-label">Age</label>
+                    <input asp-for="Age" class="form-control zhr-input" />
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-zhr-main flex-grow-1">Save Changes</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

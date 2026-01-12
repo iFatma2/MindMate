@@ -1,464 +1,128 @@
-﻿@* @{ *@
-@*     ViewData["Title"] = "Home Page"; *@
-@* } *@
-@* *@
-@* <div class="text-center"> *@
-@*     <h1 class="display-4">Welcome</h1> *@
-@*     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
-@* </div> *@
-
-@* @model IEnumerable<ZhrCare.Models.Patient> *@
-@* @{ *@
-@*     ViewData["Title"] = "Dashboard"; *@
-@*     var selectedId = ViewBag.SelectedPatientId; *@
-@* } *@
-@* *@
-@* <style> *@
-@*     /* حل مشكلة التداخل مع الفوتر - المربع الأحمر */ *@
-@*     .dashboard-wrapper { *@
-@*         padding-bottom: 100px; /* مساحة إضافية تمنع وصول المحتوى للفوتر */ *@
-@*     } *@
-@* *@
-@*     /* توحيد الألوان - المربعات الزرقاء */ *@
-@*     .text-primary-custom { color: #6c5ce7 !important; } *@
-@*     .bg-primary-custom { background-color: #6c5ce7 !important; } *@
-@*     .btn-outline-custom {  *@
-@*         color: #6c5ce7;  *@
-@*         border-color: #6c5ce7;  *@
-@*     } *@
-@*     .btn-outline-custom:hover {  *@
-@*         background-color: #6c5ce7;  *@
-@*         color: white;  *@
-@*     } *@
-@* *@
-@*     /* جعل القوائم قابلة للتمرير بداخل البطاقة فقط */ *@
-@*     .fixed-scroll-panel { *@
-@*         max-height: 320px; *@
-@*         overflow-y: auto; *@
-@*         padding-right: 5px; *@
-@*     } *@
-@*     .fixed-scroll-panel::-webkit-scrollbar { *@
-@*         width: 4px; *@
-@*     } *@
-@*     .fixed-scroll-panel::-webkit-scrollbar-thumb { *@
-@*         background-color: #e2e2e2; *@
-@*         border-radius: 10px; *@
-@*     } *@
-@* </style> *@
-@* *@
-@* <div class="container-fluid py-4 dashboard-container"> *@
-@*     <div class="row mb-4"> *@
-@*         <div class="col-md-8 text-center text-md-start"> *@
-@*             <h2 class="fw-bold text-dark-main">Welcome, <span class="text-purple-brand">@User.Identity.Name</span> 👋</h2> *@
-@*             <p class="text-muted">Manage your patients and track their daily activities from one place.</p> *@
-@*         </div> *@
-@*          *@
-@*         <div class="col-md-4"> *@
-@*             <div class="card border-0 shadow-sm p-2" style="border-radius: 15px;"> *@
-@*                 <form asp-action="Index" method="get" id="patientForm"> *@
-@*                     <label class="small text-muted ps-2">Switch Patient View:</label> *@
-@*                     <select name="selectedPatientId" onchange="document.getElementById('patientForm').submit()"  *@
-@*                             class="form-select border-0 fw-bold text-purple-brand"> *@
-@*                         <option value="">All Patients Summary</option> *@
-@*                         @foreach (var p in ViewBag.AllPatients) { *@
-@*                             <option value="@p.Id" selected="@(selectedId == p.Id)">@p.Name</option> *@
-@*                         } *@
-@*                     </select> *@
-@*                 </form> *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@* *@
-@*     <div class="row g-4 mb-5"> *@
-@*         <div class="col-md-4"> *@
-@*             <div class="card border-0 shadow-sm p-3" style="border-radius: 20px; border-left: 6px solid #6c5ce7 !important;"> *@
-@*                 <div class="d-flex align-items-center"> *@
-@*                     <div class="icon-box p-3 rounded-circle me-3" style="background-color: #f1f0ff;"> *@
-@*                         <i class="bi bi-people-fill" style="font-size: 1.5rem; color: #6c5ce7;"></i> *@
-@*                     </div> *@
-@*                     <div> *@
-@*                         <h6 class="text-muted mb-0 small">Total Patients</h6> *@
-@*                         <h3 class="fw-bold mb-0 text-dark-main">@ViewBag.TotalPatients</h3> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*         <div class="col-md-4"> *@
-@*             <div class="card border-0 shadow-sm p-3" style="border-radius: 20px; border-left: 6px solid #fdcb6e !important;"> *@
-@*                 <div class="d-flex align-items-center"> *@
-@*                     <div class="icon-box p-3 rounded-circle me-3" style="background-color: #fff9e6;"> *@
-@*                         <i class="bi bi-capsule" style="font-size: 1.5rem; color: #fdcb6e;"></i> *@
-@*                     </div> *@
-@*                     <div> *@
-@*                         <h6 class="text-muted mb-0 small">@(selectedId != null ? "Patient Meds" : "Today's Meds")</h6> *@
-@*                         <h3 class="fw-bold mb-0 text-dark-main">@ViewBag.TodayMedsCount</h3> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*         <div class="col-md-4"> *@
-@*             <div class="card border-0 shadow-sm p-3" style="border-radius: 20px; border-left: 6px solid #00cec9 !important;"> *@
-@*                 <div class="d-flex align-items-center"> *@
-@*                     <div class="icon-box p-3 rounded-circle me-3" style="background-color: #e6fffe;"> *@
-@*                         <i class="bi bi-camera-reels" style="font-size: 1.5rem; color: #00cec9;"></i> *@
-@*                     </div> *@
-@*                     <div> *@
-@*                         <h6 class="text-muted mb-0 small">Memories</h6> *@
-@*                         <h3 class="fw-bold mb-0 text-dark-main">@ViewBag.TotalMemories</h3> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@* *@
-@*     <div class="row g-4"> *@
-@*         <div class="col-lg-8"> *@
-@*             <div class="card card-custom p-4 mb-4"> *@
-@*                 <div class="d-flex justify-content-between align-items-center mb-4"> *@
-@*                     <h5 class="fw-bold mb-0 text-dark-main"><i class="bi bi-person-heart me-2 text-purple-brand"></i>Recent Patients</h5> *@
-@*                     <a asp-controller="Patients" asp-action="Index" class="btn btn-sm text-white px-3" style="background-color: #6c5ce7; border-radius: 10px;">View All</a> *@
-@*                 </div> *@
-@*                 <div class="table-responsive"> *@
-@*                     <table class="table table-hover align-middle"> *@
-@*                         <thead class="table-light"> *@
-@*                             <tr class="small text-muted text-uppercase"> *@
-@*                                 <th>Patient</th> *@
-@*                                 <th>Age</th> *@
-@*                                 <th>Quick Access</th> *@
-@*                             </tr> *@
-@*                         </thead> *@
-@*                         <tbody> *@
-@*                             @foreach (var p in Model) { *@
-@*                                 <tr> *@
-@*                                     <td> *@
-@*                                         <div class="d-flex align-items-center"> *@
-@*                                             <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px; background-color: #a29bfe;"> *@
-@*                                                 @p.Name.Substring(0,1) *@
-@*                                             </div> *@
-@*                                             <span class="fw-bold text-dark-main">@p.Name</span> *@
-@*                                         </div> *@
-@*                                     </td> *@
-@*                                     <td class="text-muted">@p.Age Years</td> *@
-@*                                     <td> *@
-@*                                         <div class="btn-group shadow-sm" style="border-radius: 8px; overflow: hidden;"> *@
-@*                                             <a asp-controller="Medications" asp-action="Index" asp-route-patientId="@p.Id" class="btn btn-sm btn-white border-end text-primary" title="Meds"><i class="bi bi-capsule"></i></a> *@
-@*                                             <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@p.Id" class="btn btn-sm btn-white border-end text-info" title="Memories"><i class="bi bi-images"></i></a> *@
-@*                                             <a asp-controller="Routines" asp-action="Index" asp-route-patientId="@p.Id" class="btn btn-sm btn-white text-success" title="Routines"><i class="bi bi-calendar-check"></i></a> *@
-@*                                         </div> *@
-@*                                     </td> *@
-@*                                 </tr> *@
-@*                             } *@
-@*                         </tbody> *@
-@*                     </table> *@
-@*                 </div> *@
-@*             </div> *@
-@* *@
-@*             <div class="row g-4"> *@
-@*                 <div class="col-md-6"> *@
-@*                     <div class="card card-custom p-4"> *@
-@*                         <h6 class="fw-bold mb-3 text-warning"><i class="bi bi-clock-history me-2"></i>Upcoming Meds</h6> *@
-@*                         <div class="scrollable-panel"> *@
-@*                             @if (!((IEnumerable<dynamic>)ViewBag.TodayMedications).Any()) { *@
-@*                                 <p class="text-muted small">No medications scheduled.</p> *@
-@*                             } *@
-@*                             @foreach (var med in ViewBag.TodayMedications) { *@
-@*                                 <div class="d-flex align-items-start timeline-item"> *@
-@*                                     <div class="badge bg-light text-warning me-2 p-2 shadow-sm border" style="min-width: 55px; font-weight: 500;">@med.ScheduledTime.ToString(@"hh\:mm")</div> *@
-@*                                     <div> *@
-@*                                         <div class="fw-bold small text-dark-main">@med.Name</div> *@
-@*                                         <div class="text-muted small">Patient: @med.Patient.Name</div> *@
-@*                                     </div> *@
-@*                                 </div> *@
-@*                             } *@
-@*                         </div> *@
-@*                     </div> *@
-@*                 </div> *@
-@* *@
-@*                 <div class="col-md-6"> *@
-@*                     <div class="card card-custom p-4"> *@
-@*                         <h6 class="fw-bold mb-3 text-success"><i class="bi bi-calendar-check me-2"></i>Daily Routines</h6> *@
-@*                         <div class="scrollable-panel"> *@
-@*                             @if (!((IEnumerable<dynamic>)ViewBag.TodayRoutines).Any()) { *@
-@*                                 <p class="text-muted small">No routines set for today.</p> *@
-@*                             } *@
-@*                             @foreach (var routine in ViewBag.TodayRoutines) { *@
-@*                                 <div class="d-flex align-items-start timeline-item"> *@
-@*                                     <div class="badge bg-light text-success me-2 p-2 shadow-sm border" style="min-width: 55px; font-weight: 500;">@routine.Time.ToString(@"hh\:mm")</div> *@
-@*                                     <div> *@
-@*                                         <div class="fw-bold small text-dark-main">@routine.ActivityName</div> *@
-@*                                         <div class="text-muted small">Patient: @routine.Patient.Name</div> *@
-@*                                     </div> *@
-@*                                 </div> *@
-@*                             } *@
-@*                         </div> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@* *@
-@*         <div class="col-lg-4"> *@
-@*             <div class="card card-custom p-4 mb-4 text-white"  *@
-@*                  style="background: linear-gradient(135deg, #6c5ce7, #a29bfe);"> *@
-@*                 <h5 class="fw-bold mb-3"><i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions</h5> *@
-@*                  *@
-@*                 @if (selectedId != null) { *@
-@*                     <p class="small opacity-75 mb-3">Manage <strong>@ViewBag.SelectedPatientName</strong>:</p> *@
-@*                     <div class="d-grid gap-2 mb-3"> *@
-@*                         <a asp-controller="Medications" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light btn-sm fw-bold text-primary text-start ps-3 shadow-sm" style="border-radius: 10px;"> *@
-@*                             <i class="bi bi-plus-circle me-2"></i> Add Medication *@
-@*                         </a> *@
-@*                         <a asp-controller="Routines" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light btn-sm fw-bold text-success text-start ps-3 shadow-sm" style="border-radius: 10px;"> *@
-@*                             <i class="bi bi-plus-circle me-2"></i> Add Routine *@
-@*                         </a> *@
-@*                         <a asp-controller="MemoryRecords" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light btn-sm fw-bold text-info text-start ps-3 shadow-sm" style="border-radius: 10px;"> *@
-@*                             <i class="bi bi-plus-circle me-2"></i> Add Memory *@
-@*                         </a> *@
-@*                     </div> *@
-@*                     <hr class="my-3 opacity-25"> *@
-@*                 } *@
-@*                  *@
-@*                 <p class="small opacity-75 mb-2">General Actions:</p> *@
-@*                 <div class="d-grid gap-2"> *@
-@*                     <a asp-controller="Patients" asp-action="Create" class="btn btn-white btn-sm fw-bold text-dark-main py-2 shadow-sm" style="border-radius: 10px; background: rgba(255,255,255,0.95);"> *@
-@*                         <i class="bi bi-person-plus-fill me-2"></i> Register New Patient *@
-@*                     </a> *@
-@*                 </div> *@
-@*             </div> *@
-@*              *@
-@*             <div class="card card-custom p-4 text-center"> *@
-@*                 <div class="mb-2"> *@
-@*                     <i class="bi bi-heart-pulse-fill text-danger" style="font-size: 2.5rem;"></i> *@
-@*                 </div> *@
-@*                 <h6 class="fw-bold text-dark-main">Caregiver's Note</h6> *@
-@*                 <p class="fst-italic text-muted small mb-0">"Small acts of care lead to big changes in health."</p> *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
-
-
-@model IEnumerable<ZhrCare.Models.Patient>
+﻿@model IEnumerable<ZhrCare.Models.Patient>
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ZhrCare.Models.ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Dashboard";
     var selectedId = ViewBag.SelectedPatientId;
-    
     var currentUser = await UserManager.GetUserAsync(User);
     var nameToShow = currentUser?.FullName ?? User.Identity.Name;
 }
 
-<style>
-    /* تعريف المتغيرات في جذر المستند لتجنب تنبيهات التحذير وضمان الشمولية */
-    :root {
-        --zhr-purple: #6c5ce7;
-        --zhr-purple-light: #f1f0ff;
-        --zhr-purple-hover: #5b4bc4;
-        --zhr-text-dark: #2d3436;
-        --zhr-gray: #f8f9fa;
-    }
-
-    /* الكلاس الرئيسي للخلفية ومنطقة الأمان */
-    .dashboard-bg {
-        background-color: var(--zhr-gray);
-        min-height: 100vh;
-        padding-bottom: 100px; /* حل مشكلة الفوتر: مساحة أمان سفلية */
-        margin: -1rem -1rem 0 -1rem; /* إلغاء هوامش الحاوية الافتراضية لتملأ الشاشة */
-    }
-
-    .kpi-card {
-        border-radius: 24px;
-        border: none;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        background: #fff;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    }
-
-    .kpi-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(108, 92, 231, 0.1);
-    }
-
-    .action-btn-circle {
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        background-color: var(--zhr-purple-light);
-        color: var(--zhr-purple) !important;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-    .action-btn-circle:hover {
-        background-color: var(--zhr-purple);
-        color: #fff !important;
-    }
-
-    .zhr-scroll {
-        max-height: 350px;
-        overflow-y: auto;
-        padding-right: 8px;
-    }
-
-    .zhr-scroll::-webkit-scrollbar { width: 5px; }
-    .zhr-scroll::-webkit-scrollbar-thumb { background: #e2e2e2; border-radius: 10px; }
-
-    .list-item-custom {
-        border: 1px solid #f1f1f1;
-        border-radius: 16px;
-        padding: 12px;
-        margin-bottom: 10px;
-        transition: 0.2s;
-    }
-
-    .list-item-custom:hover {
-        border-color: var(--zhr-purple-light);
-        background-color: #fcfcff;
-    }
-
-    .sidebar-gradient {
-        background: linear-gradient(145deg, var(--zhr-purple), #8e7dff);
-        border-radius: 24px;
-        border: none;
-    }
-</style>
-
-<div class="dashboard-bg"> <div class="container-fluid pt-4 px-4">
+<div class="dashboard-wrapper">
+    <div class="container py-5">
         
-        <div class="row mb-5 align-items-end">
-            <div class="col-lg-8 text-center text-lg-start mb-4 mb-lg-0">
-                <h1 class="fw-bold" style="color: var(--zhr-text-dark);">
-                    Dashboard, <span style="color: var(--zhr-purple);">@nameToShow</span> 👋
-                </h1>
-                <p class="text-muted mb-0">Monitor care activities and patient health at a glance.</p>
-            </div>
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm p-3" style="border-radius: 18px;">
-                    <form asp-action="Index" method="get" id="pSwitchForm">
-                        <label class="small text-muted fw-bold mb-1 ms-1 text-uppercase">Selected Patient View</label>
-                        <select name="selectedPatientId" onchange="this.form.submit()" class="form-select border-0 bg-light fw-bold" style="color: var(--zhr-purple); border-radius: 10px;">
-                            <option value="">Full System Overview</option>
-                            @if (ViewBag.AllPatients != null) {
-                                foreach (var p in ViewBag.AllPatients) {
-                                    <option value="@p.Id" selected="@(selectedId == p.Id)">@p.Name</option>
-                                }
-                            }
-                        </select>
-                    </form>
-                </div>
-            </div>
+        <div class="text-center mb-5">
+            <h2 class="hero-title">Welcome back, <span style="color: #8DBCD2;">@nameToShow</span> 🌸</h2>
+            <p class="text-muted" style="font-family: 'Open Sans'; font-size: 18px;">Here’s a gentle overview of your caregiving world today.</p>
         </div>
 
         <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="card kpi-card p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-4 p-3 me-3" style="background: var(--zhr-purple-light); color: var(--zhr-purple);">
-                            <i class="bi bi-people fs-3"></i>
-                        </div>
-                        <div>
-                            <span class="text-muted small fw-bold">Active Patients</span>
-                            <h2 class="fw-bold mb-0">@(ViewBag.TotalPatients ?? 0)</h2>
-                        </div>
-                    </div>
+                <div class="zhr-dashboard-card text-center">
+                    <div class="stat-number" style="color: #8DBCD2;">@(ViewBag.TotalPatients ?? 0)</div>
+                    <div class="stat-label text-muted">Active Patients</div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card kpi-card p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-4 p-3 me-3" style="background: #fff9e6; color: #d6a01d;">
-                            <i class="bi bi-capsule fs-3"></i>
-                        </div>
-                        <div>
-                            <span class="text-muted small fw-bold">Today's Meds</span>
-                            <h2 class="fw-bold mb-0">@(ViewBag.TodayMedsCount ?? 0)</h2>
-                        </div>
-                    </div>
+                <div class="zhr-dashboard-card text-center">
+                    <div class="stat-number" style="color: #DCA593;">@(ViewBag.TodayMedsCount ?? 0)</div>
+                    <div class="stat-label text-muted">Meds in Schedule</div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card kpi-card p-4">
-                    <div class="d-flex align-items-center"> 
-                        <div class="rounded-4 p-3 me-3" style="background: #e6fffe; color: #00cec9;">
-                            <i class="bi bi-camera-reels fs-3"></i>
-                        </div>
-                        <div>
-                            <span class="text-muted small fw-bold">Memory Logs</span>
-                            <h2 class="fw-bold mb-0">@(ViewBag.TotalMemories ?? 0)</h2>
-                        </div>
-                    </div>
+                <div class="zhr-dashboard-card text-center">
+                    <div class="stat-number" style="color: #23201E;">@(ViewBag.TotalMemories ?? 0)</div>
+                    <div class="stat-label text-muted">Memory Records</div>
                 </div>
             </div>
         </div>
 
         <div class="row g-4">
             <div class="col-lg-8">
-                <div class="card kpi-card p-4 mb-4">
+                <div class="zhr-dashboard-card mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-heart-pulse me-2" style="color: var(--zhr-purple);"></i>Recent Care Profiles</h5>
-                        <a asp-controller="Patients" asp-action="Index" class="btn btn-sm fw-bold" style="color: var(--zhr-purple); background: var(--zhr-purple-light); border-radius: 10px;">View All</a>
+                        <h4 class="block-title mb-0">Recent Patients</h4>
+                        <form asp-action="Index" method="get" class="d-flex align-items-center">
+                            <select name="selectedPatientId" onchange="this.form.submit()" class="form-select form-select-sm border-0 bg-light" style="border-radius: 10px; width: 150px;">
+                                <option value="">Filter Patient</option>
+                                @foreach (var p in ViewBag.AllPatients) {
+                                    <option value="@p.Id" selected="@(selectedId == p.Id)">@p.Name</option>
+                                }
+                            </select>
+                        </form>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle border-0">
-                            <thead class="text-muted small text-uppercase">
-                                <tr><th>Name</th><th>Age</th><th class="text-end">Quick Access</th></tr>
+                        <table class="table table-borderless align-middle">
+                            <thead class="text-muted small fw-bold">
+                                <tr><th>NAME</th><th>AGE</th><th class="text-end">ACTION</th></tr>
                             </thead>
                             <tbody>
-                                @if (Model != null) {
-                                    foreach (var p in Model) {
-                                        <tr>
-                                            <td><span class="fw-bold text-dark">@p.Name</span></td>
-                                            <td><span class="badge bg-light text-dark px-3 py-2 rounded-pill">@p.Age Years</span></td>
-                                            <td>
-                                                <div class="d-flex gap-2 justify-content-end">
-                                                    <a asp-controller="Medications" asp-action="Index" asp-route-patientId="@p.Id" class="action-btn-circle" title="Meds"><i class="bi bi-capsule"></i></a>
-                                                    <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@p.Id" class="action-btn-circle" title="Memories"><i class="bi bi-images"></i></a>
-                                                    <a asp-controller="Routines" asp-action="Index" asp-route-patientId="@p.Id" class="action-btn-circle" title="Routines"><i class="bi bi-calendar-check"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
+                                @foreach (var p in Model) {
+                                    <tr>
+                                        <td class="fw-bold">@p.Name</td>
+                                        <td class="text-muted">@p.Age Years</td>
+                                        <td class="text-end">
+                                            <a asp-controller="Medications" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle" title="Meds"><i class="bi bi-capsule"></i></a>
+                                            <a asp-controller="Routines" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle mx-1" title="Routines"><i class="bi bi-calendar-check"></i></a>
+                                            <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle" title="Memories"><i class="bi bi-image"></i></a>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                 </div>
-
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="card kpi-card p-4">
-                            <h6 class="fw-bold mb-4" style="color: #d6a01d;"><i class="bi bi-clock-history me-2"></i>Medical Timeline</h6>
-                            <div class="zhr-scroll">
+                        <div class="zhr-dashboard-card h-100 d-flex flex-column" style="background: #fff; border-radius: 24px; border: none; padding: 25px;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="block-title mb-0" style="font-size: 24px; color: #8DBCD2;"><i class="bi bi-clock me-2"></i>Upcoming Meds</h5>
+                                @if (selectedId != null) {
+                                    <a asp-controller="Patients" asp-action="PatientDashboard" asp-route-id="@selectedId" class="btn btn-link btn-sm text-decoration-none p-0" style="color: #8DBCD2; font-weight: 600; font-size: 0.85rem;">View All <i class="bi bi-arrow-right"></i></a>
+                                }
+                            </div>
+                            <div class="flex-grow-1">
                                 @if (ViewBag.TodayMedications != null) {
-                                    foreach (var med in ViewBag.TodayMedications) {
-                                        <div class="list-item-custom d-flex align-items-center">
-                                            <div class="badge bg-white border text-dark me-3 shadow-sm p-2" style="min-width: 60px;">@med.ScheduledTime.ToString(@"hh\:mm")</div>
-                                            <div>
-                                                <div class="fw-bold small text-dark">@med.Name</div>
-                                                <div class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-person me-1"></i>@med.Patient?.Name</div>
+                                    var meds = (List<ZhrCare.Models.Medication>)ViewBag.TodayMedications;
+                                    if (meds.Any()) {
+                                        foreach (var med in meds) {
+                                            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+                                                <span class="fw-bold" style="color: #23201E; font-size: 0.95rem;">@med.Name</span>
+                                                <span class="badge bg-light text-dark fw-normal px-3 py-2" style="border-radius: 10px; font-size: 0.85rem; letter-spacing: 0.5px; border: none;">
+                                                    @med.ScheduledTime.ToString("hh:mm tt")
+                                                </span>
                                             </div>
-                                        </div>
+                                        }
+                                    } else {
+                                        <p class="text-muted small text-center py-4">No more meds scheduled for today.</p>
                                     }
                                 }
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
-                        <div class="card kpi-card p-4">
-                            <h6 class="fw-bold mb-4 text-success"><i class="bi bi-calendar-check me-2"></i>Daily Routine</h6>
-                            <div class="zhr-scroll">
+                        <div class="zhr-dashboard-card h-100 d-flex flex-column" style="background: #fff; border-radius: 24px; border: none; padding: 25px;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="block-title mb-0" style="font-size: 24px; color: #DCA593;"><i class="bi bi-calendar-check me-2"></i>Daily Routine</h5>
+                                @if (selectedId != null) {
+                                    <a asp-controller="Patients" asp-action="PatientDashboard" asp-route-id="@selectedId" class="btn btn-link btn-sm text-decoration-none p-0" style="color: #DCA593; font-weight: 600; font-size: 0.85rem;">View All <i class="bi bi-arrow-right"></i></a>
+                                }
+                            </div>
+                            <div class="flex-grow-1">
                                 @if (ViewBag.TodayRoutines != null) {
-                                    foreach (var routine in ViewBag.TodayRoutines) {
-                                        <div class="list-item-custom d-flex align-items-center">
-                                            <div class="badge bg-white border text-dark me-3 shadow-sm p-2" style="min-width: 60px;">@routine.Time.ToString(@"hh\:mm")</div>
-                                            <div>
-                                                <div class="fw-bold small text-dark">@routine.ActivityName</div>
-                                                <div class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-person me-1"></i>@routine.Patient?.Name</div>
+                                    var routines = (List<ZhrCare.Models.Routine>)ViewBag.TodayRoutines;
+                                    if (routines.Any()) {
+                                        foreach (var r in routines) {
+                                            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+                                                <span class="fw-bold" style="color: #23201E; font-size: 0.95rem;">@r.ActivityName</span>
+                                                <span class="badge bg-light text-dark fw-normal px-3 py-2" style="border-radius: 10px; font-size: 0.85rem; letter-spacing: 0.5px; border: none;">
+                                                    @r.Time.ToString("hh:mm tt")
+                                                </span>
                                             </div>
-                                        </div>
+                                        }
+                                    } else {
+                                        <p class="text-muted small text-center py-4">Routine is clear for now.</p>
                                     }
                                 }
                             </div>
@@ -468,30 +132,22 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card sidebar-gradient p-4 text-white mb-4 shadow-lg">
-                    <h5 class="fw-bold mb-4"><i class="bi bi-lightning-charge-fill me-2"></i>Quick Manager</h5>
-                    @if (selectedId != null) {
-                        <p class="small opacity-75 mb-3">Adding data for: <strong>@ViewBag.SelectedPatientName</strong></p>
-                        <div class="d-grid gap-3 mb-4">
-                            <a asp-controller="Medications" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light fw-bold py-2 border-0 shadow-sm" style="color: #d6a01d; border-radius: 12px;">+ New Medication</a>
-                            <a asp-controller="Routines" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light fw-bold py-2 border-0 shadow-sm" style="color: #27ae60; border-radius: 12px;">+ New Routine</a>
-                            <a asp-controller="MemoryRecords" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-light fw-bold py-2 border-0 shadow-sm" style="color: #00cec9; border-radius: 12px;">+ New Memory Log</a>
-                        </div>
-                        <hr class="opacity-25 my-4">
-                    }
-                    <div class="d-grid">
-                        <a asp-controller="Patients" asp-action="Create" class="btn btn-dark fw-bold py-3 shadow border-0" style="background: rgba(0,0,0,0.25); border-radius: 14px;">
-                            <i class="bi bi-person-plus-fill me-2"></i>Register New Patient
-                        </a>
+                <div class="zhr-dashboard-card quick-actions-card mb-4 shadow-lg">
+                    <h5 class="block-title text-white mb-4" style="font-size: 24px;">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Patients" asp-action="Create" class="btn btn-quick">Register New Patient</a>
+                        @if (selectedId != null) {
+                            <div class="divider opacity-25 my-2" style="border-top: 1px solid white;"></div>
+                            <a asp-controller="Medications" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Medication</a>
+                            <a asp-controller="Routines" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Routine</a>
+                            <a asp-controller="MemoryRecords" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Memory</a>
+                        }
                     </div>
                 </div>
-                
-                <div class="card kpi-card p-4 text-center border-0 shadow-sm">
-                    <div class="mb-3">
-                        <i class="bi bi-heart-fill text-danger fs-1"></i>
-                    </div>
-                    <h6 class="fw-bold text-dark">Caregiver Quote</h6>
-                    <p class="fst-italic text-muted small px-2">"Caregiving is an act of love, spirit, and soul."</p>
+
+                <div class="quote-section">
+                    <i class="bi bi-heart-fill mb-3 d-block" style="color: #DCA593; font-size: 2rem;"></i>
+                    <p class="quote-text">“Caring for one person is love. Caring for many is grace.”</p>
                 </div>
             </div>
         </div>

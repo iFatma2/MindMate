@@ -18,7 +18,7 @@ namespace ZhrCare.Models
         public DateTime TakenTime { get; set; }
 
         [Required]
-        public string Status { get; set; } // e.g., Taken, Skipped, Snoozed
+        public string Status { get; set; }
 
         // Navigation Property
         public virtual Medication Medication { get; set; }

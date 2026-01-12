@@ -24,19 +24,31 @@ namespace ZhrCare.Controllers
             _userManager = userManager;
         }
 
+        
         // GET: Routines
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? selectedPatientId)
         {
-            
             var userId = _userManager.GetUserId(User);
-            var routines = await _context.Routines
-                .Include(r => r.Patient) 
-                .Where(r => r.Patient.CaregiverId == userId) 
+    
+            ViewBag.AllPatients = await _context.Patients
+                .Where(p => p.CaregiverId == userId)
                 .ToListAsync();
+            ViewBag.SelectedPatientId = selectedPatientId;
+
+            var query = _context.Routines
+                .Include(r => r.Patient)
+                .Where(r => r.Patient.CaregiverId == userId);
+
+            if (selectedPatientId.HasValue)
+            {
+                query = query.Where(r => r.PatientId == selectedPatientId.Value);
+            }
+
+            var routines = await query.ToListAsync();
 
             return View(routines);
         }
-
+        
         // GET: Routines/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -180,6 +192,22 @@ namespace ZhrCare.Controllers
         private bool RoutineExists(int id)
         {
             return _context.Routines.Any(e => e.Id == id);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleComplete(int routineId)
+        {
+            var routine = await _context.Routines.FindAsync(routineId);
+            if (routine == null) return NotFound();
+
+            routine.IsCompleted = !routine.IsCompleted;
+    
+            _context.Update(routine);
+            await _context.SaveChangesAsync();
+
+            string returnUrl = Request.Headers["Referer"].ToString();
+            return !string.IsNullOrEmpty(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
         }
     }
 }
