@@ -76,7 +76,8 @@ namespace MindMate.Controllers
         // POST: MemoryRecords/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatientId,Caption")] MemoryRecord memoryRecord, IFormFile? imageFile, IFormFile? audioFile)
+        //public async Task<IActionResult> Create([Bind("PatientId,Caption")] MemoryRecord memoryRecord, IFormFile? imageFile, IFormFile? audioFile)
+        public async Task<IActionResult> Create([Bind("PatientId,Caption")] MemoryRecord memoryRecord, IFormFile? imageFile, IFormFile? VoiceFile)
         {
             if (ModelState.IsValid)
             {
@@ -92,9 +93,9 @@ namespace MindMate.Controllers
                     memoryRecord.ImagePath = await SaveFile(imageFile, "images");
                 }
 
-                if (audioFile != null)
+                if (VoiceFile != null)
                 {
-                    memoryRecord.AudioPath = await SaveFile(audioFile, "audio");
+                    memoryRecord.AudioPath = await SaveFile(VoiceFile, "audio");
                 }
 
                 memoryRecord.CreatedAt = DateTime.Now;

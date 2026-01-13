@@ -16,7 +16,7 @@
 
                 <div class="text-center mb-4">
                     @if (!string.IsNullOrEmpty(Model.ImagePath)) {
-                        <img src="~/uploads/images/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" />
+                        <img src="~/uploads/images/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" alt=""/>
                     }
                 </div>
 
@@ -30,10 +30,41 @@
                     <label class="mindmate-label">Replace Photo (Optional)</label>
                     <input type="file" name="newImage" class="form-control mindmate-input" accept="image/*" />
                 </div>
+                
+                <div class="mb-4">
+                    <label class="mindmate-label">Voice Recording</label>
+    
+                    @if (!string.IsNullOrEmpty(Model.AudioPath)) {
+                        <div id="currentAudioContainer" class="mb-3 p-2 border rounded bg-light">
+                            <small class="text-muted d-block mb-1">Current Recording:</small>
+                            <audio controls class="w-100" style="height: 35px;">
+                                <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg">
+                            </audio>
+                        </div>
+                    }
+                </div>
 
                 <div class="mb-4">
-                    <label class="mindmate-label">Replace Audio (Optional)</label>
-                    <input type="file" name="newAudio" class="form-control mindmate-input" accept="audio/*" />
+                    <label class="mindmate-label">Voice Message (Optional)</label>
+                    <div class="recording-container d-flex align-items-center gap-3 shadow-sm">
+                        <button type="button" id="recordBtn" class="btn btn-record-pulse">
+                            <i class="bi bi-mic-fill fs-4"></i>
+                        </button>
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span id="recordStatus" class="status-text fw-bold">Click to start</span>
+                                <span id="recordingTimer" class="timer-badge d-none">00:00</span>
+                            </div>
+                            <audio id="audioPlayback" controls class="w-100 d-none" style="height: 35px;"></audio>
+                        </div>
+
+                        <button type="button" id="resetBtn" class="btn btn-reset-minimal d-none">
+                            <i class="bi bi-trash3 me-1"></i> Clear
+                        </button>
+
+                        <input type="file" name="newAudio" id="voiceFileInput" class="d-none" accept="audio/*" />
+                    </div>
                 </div>
 
                 <div class="d-flex gap-2 mt-5">
@@ -47,4 +78,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        initAudioRecorder({ defaultText: "Click mic to re-record" });
+    </script>
+    
 }

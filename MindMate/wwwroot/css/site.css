@@ -406,3 +406,68 @@ footer {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* --- 13. Voice Recording UI Styles --- */
+.recording-container {
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.btn-record-pulse {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--mindmate-bg-light);
+  color: var(--mindmate-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 118, 117, 0.15);
+}
+
+.btn-record-pulse.recording {
+  background-color: var(--mindmate-danger) !important;
+  color: white !important;
+  animation: pulse-mindmate 1.5s infinite;
+}
+
+.status-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.timer-badge {
+  background-color: var(--bg-danger-subtle);
+  color: var(--mindmate-danger);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.btn-reset-minimal {
+  background: transparent;
+  border: none;
+  color: #adb5bd;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.btn-reset-minimal:hover {
+  color: var(--mindmate-danger);
+  transform: scale(1.05);
+}
+
+@keyframes pulse-mindmate {
+  0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(255, 118, 117, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
+}
