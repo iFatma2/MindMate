@@ -1,0 +1,31 @@
+@model MindMate.Models.Medication
+@{ ViewData["Title"] = "Delete Medication"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container text-center">
+        <h1 class="mindmate-hero-title text-danger">Remove Medication?</h1>
+        <p class="mindmate-subtitle">You are about to stop the schedule for @Model.Name</p>
+
+        <div class="mindmate-card mx-auto text-start" style="max-width: 500px; border-top: 5px solid var(--mindmate-accent);">
+            <div class="mb-4 text-center">
+                <i class="bi bi-trash3 text-danger fs-1 opacity-25"></i>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Name</div>
+                <div class="info-value">@Model.Name</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Patient</div>
+                <div class="info-value">@Model.Patient.Name</div>
+            </div>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-mindmate-danger w-100 mb-3">Confirm Deletion</button>
+                <div class="text-center">
+                    <a asp-action="Index" class="text-muted text-decoration-none small">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

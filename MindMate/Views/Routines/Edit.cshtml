@@ -1,0 +1,44 @@
+@model MindMate.Models.Routine
+@{ ViewData["Title"] = "Edit Routine"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Edit Routine</h1>
+        <div class="mindmate-card mx-auto" style="max-width: 500px;">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="mb-4">
+                    <label asp-for="PatientId" class="mindmate-label">Patient</label>
+                    <select asp-for="PatientId" class="form-select mindmate-input" asp-items="ViewBag.PatientId"></select>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ActivityName" class="mindmate-label">Activity Name</label>
+                    <input asp-for="ActivityName" class="form-control mindmate-input" />
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Time" class="mindmate-label">Date & Time</label>
+                    <input asp-for="Time" class="form-control mindmate-input" />
+                </div>
+
+                <div class="mb-4 p-3 rounded-3 border bg-light">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" asp-for="IsCompleted" id="completedCheck">
+                        <label class="form-check-label fw-bold ms-2" for="completedCheck">Mark as Completed</label>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-mindmate-main flex-grow-1">Update</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

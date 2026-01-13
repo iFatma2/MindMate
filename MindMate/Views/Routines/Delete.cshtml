@@ -1,0 +1,27 @@
+@model MindMate.Models.Routine
+@{ ViewData["Title"] = "Delete Routine"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container text-center">
+        <h1 class="mindmate-hero-title text-danger">Delete Routine?</h1>
+        <p class="mindmate-subtitle text-muted">This action cannot be undone.</p>
+
+        <div class="mindmate-card mx-auto text-start shadow-sm" style="max-width: 500px; border-top: 5px solid #ff7675 !important;">
+            <div class="mb-4 text-center">
+                <div class="d-inline-block p-3 rounded-circle bg-danger-subtle mb-3">
+                    <i class="bi bi-trash3 text-danger fs-2"></i>
+                </div>
+                <h5 class="fw-bold">@Model.ActivityName</h5>
+                <p class="small text-muted">Scheduled for @Model.Time.ToString("dd/MM/yyyy hh:mm tt")</p>
+            </div>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger rounded-pill py-2 fw-bold shadow-sm">Confirm Delete</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill py-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,155 @@
+﻿@model IEnumerable<MindMate.Models.Patient>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<MindMate.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Dashboard";
+    var selectedId = ViewBag.SelectedPatientId;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var nameToShow = currentUser?.FullName ?? User.Identity.Name;
+}
+
+<div class="dashboard-wrapper">
+    <div class="container py-5">
+        
+        <div class="text-center mb-5">
+            <h2 class="hero-title">Welcome back, <span style="color: #8DBCD2;">@nameToShow</span> 🌸</h2>
+            <p class="text-muted" style="font-family: 'Open Sans'; font-size: 18px;">Here’s a gentle overview of your caregiving world today.</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="mindmate-dashboard-card text-center">
+                    <div class="stat-number" style="color: #8DBCD2;">@(ViewBag.TotalPatients ?? 0)</div>
+                    <div class="stat-label text-muted">Active Patients</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mindmate-dashboard-card text-center">
+                    <div class="stat-number" style="color: #DCA593;">@(ViewBag.TodayMedsCount ?? 0)</div>
+                    <div class="stat-label text-muted">Meds in Schedule</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mindmate-dashboard-card text-center">
+                    <div class="stat-number" style="color: #23201E;">@(ViewBag.TotalMemories ?? 0)</div>
+                    <div class="stat-label text-muted">Memory Records</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="mindmate-dashboard-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="block-title mb-0">Recent Patients</h4>
+                        <form asp-action="Index" method="get" class="d-flex align-items-center">
+                            <select name="selectedPatientId" onchange="this.form.submit()" class="form-select form-select-sm border-0 bg-light" style="border-radius: 10px; width: 150px;">
+                                <option value="">Filter Patient</option>
+                                @foreach (var p in ViewBag.AllPatients) {
+                                    <option value="@p.Id" selected="@(selectedId == p.Id)">@p.Name</option>
+                                }
+                            </select>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless align-middle">
+                            <thead class="text-muted small fw-bold">
+                                <tr><th>NAME</th><th>AGE</th><th class="text-end">ACTION</th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model) {
+                                    <tr>
+                                        <td class="fw-bold">@p.Name</td>
+                                        <td class="text-muted">@p.Age Years</td>
+                                        <td class="text-end">
+                                            <a asp-controller="Medications" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle" title="Meds"><i class="bi bi-capsule"></i></a>
+                                            <a asp-controller="Routines" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle mx-1" title="Routines"><i class="bi bi-calendar-check"></i></a>
+                                            <a asp-controller="MemoryRecords" asp-action="Index" asp-route-patientId="@p.Id" class="btn-action-circle" title="Memories"><i class="bi bi-image"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="mindmate-dashboard-card h-100 d-flex flex-column" style="background: #fff; border-radius: 24px; border: none; padding: 25px;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="block-title mb-0" style="font-size: 24px; color: #8DBCD2;"><i class="bi bi-clock me-2"></i>Upcoming Meds</h5>
+                                @if (selectedId != null) {
+                                    <a asp-controller="Patients" asp-action="PatientDashboard" asp-route-id="@selectedId" class="btn btn-link btn-sm text-decoration-none p-0" style="color: #8DBCD2; font-weight: 600; font-size: 0.85rem;">View All <i class="bi bi-arrow-right"></i></a>
+                                }
+                            </div>
+                            <div class="flex-grow-1">
+                                @if (ViewBag.TodayMedications != null) {
+                                    var meds = (List<MindMate.Models.Medication>)ViewBag.TodayMedications;
+                                    if (meds.Any()) {
+                                        foreach (var med in meds) {
+                                            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+                                                <span class="fw-bold" style="color: #23201E; font-size: 0.95rem;">@med.Name</span>
+                                                <span class="badge bg-light text-dark fw-normal px-3 py-2" style="border-radius: 10px; font-size: 0.85rem; letter-spacing: 0.5px; border: none;">
+                                                    @med.ScheduledTime.ToString("hh:mm tt")
+                                                </span>
+                                            </div>
+                                        }
+                                    } else {
+                                        <p class="text-muted small text-center py-4">No more meds scheduled for today.</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mindmate-dashboard-card h-100 d-flex flex-column" style="background: #fff; border-radius: 24px; border: none; padding: 25px;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="block-title mb-0" style="font-size: 24px; color: #DCA593;"><i class="bi bi-calendar-check me-2"></i>Daily Routine</h5>
+                                @if (selectedId != null) {
+                                    <a asp-controller="Patients" asp-action="PatientDashboard" asp-route-id="@selectedId" class="btn btn-link btn-sm text-decoration-none p-0" style="color: #DCA593; font-weight: 600; font-size: 0.85rem;">View All <i class="bi bi-arrow-right"></i></a>
+                                }
+                            </div>
+                            <div class="flex-grow-1">
+                                @if (ViewBag.TodayRoutines != null) {
+                                    var routines = (List<MindMate.Models.Routine>)ViewBag.TodayRoutines;
+                                    if (routines.Any()) {
+                                        foreach (var r in routines) {
+                                            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+                                                <span class="fw-bold" style="color: #23201E; font-size: 0.95rem;">@r.ActivityName</span>
+                                                <span class="badge bg-light text-dark fw-normal px-3 py-2" style="border-radius: 10px; font-size: 0.85rem; letter-spacing: 0.5px; border: none;">
+                                                    @r.Time.ToString("hh:mm tt")
+                                                </span>
+                                            </div>
+                                        }
+                                    } else {
+                                        <p class="text-muted small text-center py-4">Routine is clear for now.</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="mindmate-dashboard-card quick-actions-card mb-4 shadow-lg">
+                    <h5 class="block-title text-white mb-4" style="font-size: 24px;">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Patients" asp-action="Create" class="btn btn-quick">Register New Patient</a>
+                        @if (selectedId != null) {
+                            <div class="divider opacity-25 my-2" style="border-top: 1px solid white;"></div>
+                            <a asp-controller="Medications" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Medication</a>
+                            <a asp-controller="Routines" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Routine</a>
+                            <a asp-controller="MemoryRecords" asp-action="Create" asp-route-patientId="@selectedId" class="btn btn-quick-outline">Add Memory</a>
+                        }
+                    </div>
+                </div>
+
+                <div class="quote-section">
+                    <i class="bi bi-heart-fill mb-3 d-block" style="color: #DCA593; font-size: 2rem;"></i>
+                    <p class="quote-text">“Caring for one person is love. Caring for many is grace.”</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

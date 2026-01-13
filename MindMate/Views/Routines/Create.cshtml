@@ -1,0 +1,40 @@
+@model MindMate.Models.Routine
+@{ ViewData["Title"] = "Add Routine"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Add New Activity</h1>
+        <p class="mindmate-subtitle">Schedule a daily routine for the patient</p>
+
+        <div class="mindmate-card mx-auto" style="max-width: 500px;">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                <div class="mb-4">
+                    <label asp-for="PatientId" class="mindmate-label">Select Patient</label>
+                    <select asp-for="PatientId" class="form-select mindmate-input" asp-items="ViewBag.PatientId">
+                        <option value="">-- Choose a Patient --</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ActivityName" class="mindmate-label">Activity Name</label>
+                    <input asp-for="ActivityName" class="form-control mindmate-input" placeholder="e.g., Morning Walk" />
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Time" class="mindmate-label">Date & Time</label>
+                    <input asp-for="Time" type="datetime-local" class="form-control mindmate-input" />
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-mindmate-main flex-grow-1">Save Routine</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

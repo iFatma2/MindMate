@@ -1,0 +1,50 @@
+@model MindMate.Models.MemoryRecord
+@{ ViewData["Title"] = "Edit Memory"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Edit Memory</h1>
+        <p class="mindmate-subtitle">Updating captured moment</p>
+
+        <div class="mindmate-card mx-auto" style="max-width: 600px;">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="PatientId" />
+                <input type="hidden" asp-for="ImagePath" />
+                <input type="hidden" asp-for="AudioPath" />
+                <input type="hidden" asp-for="CreatedAt" />
+
+                <div class="text-center mb-4">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath)) {
+                        <img src="~/uploads/images/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" />
+                    }
+                </div>
+
+                <div class="mb-4">
+                    <label class="mindmate-label">Caption</label>
+                    <textarea asp-for="Caption" class="form-control mindmate-input" rows="3"></textarea>
+                    <span asp-validation-for="Caption" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="mindmate-label">Replace Photo (Optional)</label>
+                    <input type="file" name="newImage" class="form-control mindmate-input" accept="image/*" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="mindmate-label">Replace Audio (Optional)</label>
+                    <input type="file" name="newAudio" class="form-control mindmate-input" accept="audio/*" />
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-mindmate-main flex-grow-1">Update Memory</button>
+                    <a asp-action="Index" asp-route-patientId="@Model.PatientId" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
