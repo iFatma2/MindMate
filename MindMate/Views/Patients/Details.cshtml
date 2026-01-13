@@ -1,0 +1,83 @@
+@model MindMate.Models.Patient
+@{ ViewData["Title"] = "Patient Info"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Patient Info</h1>
+        <p class="mindmate-subtitle">Detailed records for @Model.Name</p>
+
+        <div class="mindmate-card mx-auto" style="max-width: 700px;">
+            <div class="info-row">
+                <div class="info-label">Full Name</div>
+                <div class="info-value">@Model.Name</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Current Age</div>
+                <div class="info-value">@Model.Age Years</div>
+            </div>
+            <div class="mt-4 text-center">
+                <div class="mindmate-card-elevated d-inline-block p-4" style="max-width: 250px;">
+                    <h6 class="mindmate-label mb-3" style="color: var(--mindmate-brand);">Patient Circle QR ID</h6>
+        
+                    <div id="qrcode" class="mb-3 d-flex justify-content-center"></div>
+        
+                    <p class="small text-muted mb-3" style="font-size: 12px;">
+                        Scan this code to access the dashboard directly from any device.
+                    </p>
+        
+                    <button onclick="printQR()" class="btn btn-sm btn-mindmate-outline w-100">
+                        <i class="bi bi-printer me-1"></i> Print ID Card
+                    </button>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Registered</div>
+                <div class="info-value">@Model.CreatedAt.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="mt-5 d-flex gap-3 justify-content-center">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-mindmate-main">Edit Profile</a>
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        
+        // For Live website #
+        //var publicUrl = window.location.origin + "/Patients/PublicDashboard?token=" + "@Model.AccessToken";
+
+        // For testing website under development #
+        //var myIP = "10.20.65.137"; 
+        var myIP = "192.168.8.105"; 
+        var port = "5112"; 
+        var publicUrl = "http://" + myIP + ":" + port + "/Patients/PublicDashboard?token=" + "@Model.AccessToken";
+
+        // -------------------------------------------------------------------------
+        new QRCode(document.getElementById("qrcode"), {
+            text: publicUrl,
+            width: 160,
+            height: 160,
+            colorDark : "#23201E", 
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        function printQR() {
+            var content = document.getElementById("qrcode").innerHTML;
+            var win = window.open('', '', 'height=500,width=500');
+            win.document.write('<html><head><title>Patient QR ID</title>');
+            win.document.write('<style>body{text-align:center; padding:50px;} img{width:200px;}</style>');
+            win.document.write('</head><body>');
+            win.document.write('<h2>@Model.Name - Access QR</h2>');
+            win.document.write(content);
+            win.document.write('<p>Scan to view care schedule</p></body></html>');
+            win.document.close();
+            win.print();
+        }
+    </script>
+}

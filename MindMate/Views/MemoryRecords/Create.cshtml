@@ -1,0 +1,83 @@
+@model MindMate.Models.MemoryRecord
+@{ ViewData["Title"] = "Add Memory"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Add New Memory</h1>
+        <p class="mindmate-subtitle">Capture a special moment for your patient</p>
+
+        <div class="mindmate-card mx-auto" style="max-width: 600px;">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <input type="hidden" asp-for="PatientId" value="@ViewBag.PatientId" />
+                
+                <div class="mb-4">
+                    <label class="mindmate-label">Caption / Description</label>
+                    <textarea asp-for="Caption" class="form-control mindmate-input" placeholder="What happened in this moment?" rows="3"></textarea>
+                    <span asp-validation-for="Caption" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="mindmate-label">Photo Attachment</label>
+                    <input type="file" name="imageFile" class="form-control mindmate-input" accept="image/*" />
+                </div>
+                
+                @* <div class="mb-4"> *@
+                @*     <label class="mindmate-label">Voice Message (Optional)</label> *@
+                @*     <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light shadow-sm"> *@
+                @*         <button type="button" id="recordBtn" class="btn btn-outline-danger rounded-circle p-3 shadow-sm" style="width: 55px; height: 55px;"> *@
+                @*             <i class="bi bi-mic-fill fs-4"></i> *@
+                @*         </button> *@
+                @* *@
+                @*         <div class="flex-grow-1"> *@
+                @*             <span id="recordStatus" class="small fw-bold text-muted d-block">Click to record message</span> *@
+                @*             <div id="recordingTimer" class="small text-danger fw-bold d-none">00:00</div> *@
+                @*             <audio id="audioPlayback" controls class="w-100 mt-2 d-none" style="height: 35px;"></audio> *@
+                @*         </div> *@
+                @* *@
+                @*         <button type="button" id="resetBtn" class="btn btn-sm btn-light rounded-pill d-none border shadow-sm"> *@
+                @*             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset *@
+                @*         </button> *@
+                @* *@
+                @*         <input type="file" name="VoiceFile" id="voiceFileInput" class="d-none" accept="audio/*" /> *@
+                @*     </div> *@
+                @* </div> *@
+
+                <div class="mb-4">
+                    <label class="mindmate-label">Voice Message (Optional)</label>
+                    <div class="recording-container d-flex align-items-center gap-3 shadow-sm">
+                        <button type="button" id="recordBtn" class="btn btn-record-pulse">
+                            <i class="bi bi-mic-fill fs-4"></i>
+                        </button>
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span id="recordStatus" class="status-text fw-bold">Click to start</span>
+                                <span id="recordingTimer" class="timer-badge d-none">00:00</span>
+                            </div>
+                            <audio id="audioPlayback" controls class="w-100 d-none" style="height: 35px;"></audio>
+                        </div>
+
+                        <button type="button" id="resetBtn" class="btn btn-reset-minimal d-none">
+                            <i class="bi bi-trash3 me-1"></i> Clear
+                        </button>
+
+                        <input type="file" name="VoiceFile" id="voiceFileInput" class="d-none" accept="audio/*" />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-mindmate-main flex-grow-1">Save Memory</button>
+                    <a asp-action="Index" asp-route-patientId="@ViewBag.PatientId" class="btn btn-light rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        initAudioRecorder({ defaultText: "Click to record message" });
+    </script>
+}

@@ -1,0 +1,70 @@
+@model IEnumerable<MindMate.Models.MemoryRecord>
+@{ ViewData["Title"] = "Memory Gallery"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h1 class="mindmate-hero-title text-start mb-0">Memory Gallery</h1>
+                <div class="d-flex align-items-center gap-3 mt-2">
+                    <p class="text-muted mb-0">Preserving moments for <span class="fw-bold" style="color: var(--mindmate-brand);">@ViewBag.PatientName</span></p>
+            
+                    <form method="get" class="m-0">
+                        <select name="patientId" onchange="this.form.submit()" 
+                                class="form-select form-select-sm border-0 bg-light shadow-sm" 
+                                style="border-radius: 10px; width: 170px; cursor: pointer;">
+                            @foreach (var p in ViewBag.AllPatients)
+                            {
+                                <option value="@p.Id" selected="@(ViewBag.PatientId == p.Id)">@p.Name</option>
+                            }
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <a asp-action="Create" asp-route-patientId="@ViewBag.PatientId" class="btn btn-mindmate-main">
+                <i class="bi bi-plus-lg"></i> Add New Memory
+            </a>
+        </div>
+
+        @if (!Model.Any()) {
+            <div class="mindmate-card text-center p-5">
+                <i class="bi bi-camera fs-1 mb-3 d-block opacity-25"></i>
+                <p class="text-muted">No memories recorded yet. Start capturing moments.</p>
+            </div>
+        } else {
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var item in Model) {
+                    <div class="col">
+                        <div class="mindmate-card p-0 overflow-hidden h-100 shadow-sm border-0">
+                            @if (!string.IsNullOrEmpty(item.ImagePath)) {
+                                <img src="~/uploads/images/@item.ImagePath" class="card-img-top" style="height: 220px; object-fit: cover;" />
+                            }
+                            <div class="p-4">
+                                <h5 class="fw-bold mb-2" style="font-family: var(--font-body); color: var(--mindmate-dark);">@item.Caption</h5>
+                                @* <p class="text-muted small mb-3"><i class="bi bi-calendar3"></i> @item.CreatedAt.ToString("dd MMM yyyy")</p> *@
+                                
+                                <small class="text-muted">@item.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                
+                                @if (!string.IsNullOrEmpty(item.AudioPath)) {
+                                    <div class="bg-light p-2 rounded-pill d-flex align-items-center mb-3">
+                                        <i class="bi bi-mic-fill mx-2 text-muted"></i>
+                                        <audio controls class="w-100" style="height: 30px;">
+                                            <source src="~/uploads/audio/@item.AudioPath" type="audio/mpeg">
+                                        </audio>
+                                    </div>
+                                }
+
+                                <div class="d-flex gap-2 pt-2">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light rounded-pill flex-grow-1">View</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light rounded-pill"><i class="bi bi-pencil"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger rounded-pill"><i class="bi bi-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

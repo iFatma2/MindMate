@@ -1,0 +1,26 @@
+@model MindMate.Models.MemoryRecord
+@{ ViewData["Title"] = "Delete Memory"; }
+
+<div class="mindmate-page-wrapper">
+    <div class="container text-center">
+        <h1 class="mindmate-hero-title text-danger">Delete Memory?</h1>
+        <p class="mindmate-subtitle">This memory will be removed permanently.</p>
+
+        <div class="mindmate-card mx-auto text-start" style="max-width: 500px; border-top: 5px solid var(--mindmate-accent);">
+            <div class="text-center mb-4">
+                @if (!string.IsNullOrEmpty(Model.ImagePath)) {
+                    <img src="~/uploads/images/@Model.ImagePath" class="rounded mb-3 w-100" style="max-height: 200px; object-fit: cover;" />
+                }
+                <h5 class="fw-bold">"@Model.Caption"</h5>
+            </div>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-mindmate-danger w-100 mb-3">Confirm Permanent Delete</button>
+                <div class="text-center">
+                    <a asp-action="Index" asp-route-patientId="@Model.PatientId" class="text-muted text-decoration-none small">Go back to gallery</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

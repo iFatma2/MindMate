@@ -1,0 +1,38 @@
+@model MindMate.Models.Patient
+@{
+    ViewData["Title"] = "Register Patient";
+}
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <h1 class="mindmate-hero-title">Register Patient</h1>
+        <p class="mindmate-subtitle">Add a new loved one to your care circle.</p>
+
+        <div class="mindmate-card mx-auto" style="max-width: 500px;">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                <div class="mb-4 text-start">
+                    <label asp-for="Name" class="mindmate-label">Full Name</label>
+                    <input asp-for="Name" class="form-control mindmate-input" placeholder="e.g., John Doe" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4 text-start">
+                    <label asp-for="Age" class="mindmate-label">Age</label>
+                    <input asp-for="Age" class="form-control mindmate-input" placeholder="Enter age" />
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-mindmate-main flex-grow-1">Create Record</button>
+                    <a asp-action="Index" class="btn btn-light rounded-pill px-4 d-flex align-items-center">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

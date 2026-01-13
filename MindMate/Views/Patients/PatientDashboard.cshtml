@@ -1,0 +1,197 @@
+@model MindMate.Models.PatientDashboardViewModel
+@{
+    ViewData["Title"] = Model.PatientName + " Circle";
+}
+
+<div class="mindmate-page-wrapper">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="mindmate-hero-title" style="font-size: 52px;">@Model.PatientName's Circle</h1>
+            <p class="mindmate-subtitle">
+                Comprehensive care plan & preserved moments
+                <br />
+                <span class="small opacity-75">@DateTime.Today.ToString("dddd, dd MMMM yyyy")</span>
+            </p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="mb-5">
+                    <h3 class="block-title mb-4"><i class="bi bi-capsule-pill me-2"></i>Daily Medication</h3>
+                    
+                    @if (!Model.Medications.Any())
+                    {
+                        <div class="mindmate-card text-center p-5">
+                            <i class="bi bi-capsule-pill fs-1 mb-3 d-block opacity-25" style="color: var(--mindmate-accent);"></i>
+                            <p class="text-muted">No medication schedules found. Start by adding one.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Medications)
+                        {
+                            var isTaken = item.MedicationLogs?.Any(l => l.TakenDate.Date == DateTime.Today) ?? false;
+
+                            <div class="mindmate-card mb-3 p-0 overflow-hidden shadow-sm" 
+                                 style="border-left: 6px solid @(isTaken ? "#A8D5BA" : "#8ab6d6") !important; border-radius: 20px;">
+                                
+                                <div class="p-4 d-flex justify-content-between align-items-center bg-white">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-4 text-center" style="min-width: 80px; border-right: 1px solid #f0f0f0;">
+                                            <i class="bi @(isTaken ? "bi-check-circle-fill" : "bi-capsule-pill") fs-3" style="color: @(isTaken ? "#A8D5BA" : "#8ab6d6")"></i>
+                                            <div class="small fw-bold mt-1 text-dark">@item.ScheduledTime.ToString("hh:mm tt")</div>
+                                        </div>
+
+                                        <div>
+                                            <h4 class="mb-1 @(isTaken ? "text-decoration-line-through text-muted" : "fw-bold")" 
+                                                style="font-family: var(--font-body); font-size: 1.2rem; color: #333;">
+                                                @item.Name
+                                            </h4>
+                                            <div class="small text-muted">
+                                                Dose: <span class="fw-bold">@item.Dosage</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <form asp-controller="Patients" asp-action="MarkAsTaken" method="post" class="m-0">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="medicationId" value="@item.Id" />
+                                            <input type="hidden" name="patientId" value="@Model.PatientId" />
+
+                                            @if (isTaken)
+                                            {
+                                                <button type="submit" class="btn d-flex align-items-center text-success fw-bold px-4 py-2 bg-light rounded-pill border-success shadow-none">
+                                                    <i class="bi bi-check-lg me-2"></i> Taken
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn px-4 py-2 shadow-sm rounded-pill text-white" 
+                                                        style="background-color: #8ab6d6; font-weight: 600; border: none;">
+                                                    Mark Taken
+                                                </button>
+                                            }
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                
+                <div class="mb-5">
+                    <h3 class="block-title mb-4"><i class="bi bi-calendar-check me-2"></i>Scheduled Routines</h3>
+                    
+                    @if (!Model.Routines.Any())
+                    {
+                        <div class="mindmate-card text-center p-5">
+                            <i class="bi bi-calendar-check fs-1 mb-3 d-block opacity-25" style="color: var(--mindmate-accent);"></i>
+                            <p class="text-muted">No routines scheduled yet.</p>
+                        </div>
+                    }
+                    else
+                    {
+                    <div class="row g-3">
+                        @foreach (var routine in Model.Routines)
+                         { 
+                             <div class="col-12">
+                                <div class="mindmate-card p-4 d-flex justify-content-between align-items-center shadow-sm"
+                                     style="border-left: 5px solid @(routine.IsCompleted ? "#A8D5BA" : "#f8d7da"); border-radius: 20px;">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-4 text-center">
+                                            <i class="bi @(routine.IsCompleted ? "bi-check-circle-fill" : "bi bi-clock-history") fs-3" style="color: @(routine.IsCompleted ? "#A8D5BA" : "#f8d7da")"></i>
+                                            <div class="small fw-bold mt-1">@routine.Time.ToString("hh:mm tt")</div>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1 @(routine.IsCompleted ? "text-decoration-line-through text-muted" : "fw-bold")">
+                                                @routine.ActivityName
+                                            </h5>
+                                            <p class="small text-muted mb-0">Daily Activity</p>
+                                        </div>
+                                    </div>
+
+                                    <form asp-controller="Routines" asp-action="ToggleComplete" method="post" class="m-0">
+                                        <input type="hidden" name="routineId" value="@routine.Id" />
+                                        @if (routine.IsCompleted)
+                                         {
+                                        <button type="submit" class="btn d-flex align-items-center text-success fw-bold px-4 py-2 bg-light rounded-pill border-success shadow-none">
+                                            <i class="bi bi-check-lg me-2"></i> Completed
+                                        </button>
+                                        }
+                                        else
+                                        {
+                                        <button type="submit" class="btn px-4 py-2 shadow-sm rounded-pill text-white border-0"
+                                                style="background-color: #8ab6d6; font-weight: 600;">
+                                            Mark Done
+                                        </button>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                            }
+                    </div>
+                    }
+                    
+                </div>
+                
+                <div class="mb-5">
+                    <h3 class="block-title mb-4"><i class="bi bi-images me-2"></i>Preserved Memories</h3>
+                    
+                    @if (!Model.Memories.Any())
+                    {
+                        <div class="mindmate-card text-center p-5">
+                            <i class="bi bi-camera fs-1 mb-3 d-block opacity-25" style="color: var(--mindmate-accent);"></i>
+                            <p class="text-muted">No memories recorded yet. Start capturing moments.</p>
+                        </div>
+                    }
+                    else
+                    {
+                    <div class="row g-4">
+                        @foreach (var memory in Model.Memories)
+                         {
+                    <div class="col-md-6">
+                                <div class="mindmate-card p-0 overflow-hidden h-100 shadow-sm border-0" style="border-radius: 25px;">
+
+                                    @if (!string.IsNullOrEmpty(memory.ImagePath))
+                                     {
+                                    <img src="/uploads/images/@memory.ImagePath"
+                                            class="w-100" style="height: 250px; object-fit: cover;"
+                                            alt="Memory"
+                                            onerror="this.src='/images/placeholder.png';" />
+                                        }
+
+                                    <div class="p-4 bg-white">
+                                             <h5 class="fw-bold mb-1">@memory.Caption</h5>
+                                             <p class="text-muted small mb-3">@memory.CreatedAt.ToString("dd MMMM yyyy")</p>
+                        
+                                        @if (!string.IsNullOrEmpty(memory.AudioPath))
+                                              {
+                                    <div class="p-2 rounded-pill" style="background: #f8f9fa;">
+                                        <audio controls class="w-100" style="height: 35px;">
+                                            @* <source src="/uploads/audio/@memory.AudioPath" type="audio/mpeg"> *@
+                                            <source src="~/uploads/audio/@memory.AudioPath" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                    </div>
+                    }
+                    
+                </div>
+
+                <div class="text-center mt-5">
+                    <a asp-action="Index" class="btn btn-link text-decoration-none" style="color: #8ab6d6; font-weight: 700;">
+                        <i class="bi bi-arrow-left me-2"></i> Return to Circle
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
