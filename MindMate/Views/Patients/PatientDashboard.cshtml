@@ -151,36 +151,49 @@
                     <div class="row g-4">
                         @foreach (var memory in Model.Memories)
                          {
-                    <div class="col-md-6">
-                                <div class="mindmate-card p-0 overflow-hidden h-100 shadow-sm border-0" style="border-radius: 25px;">
+                        <div class="col-md-6">
+                                    <div class="mindmate-card p-0 overflow-hidden h-100 shadow-sm border-0" style="border-radius: 25px;">
 
-                                    @if (!string.IsNullOrEmpty(memory.ImagePath))
-                                     {
-                                    <img src="/uploads/images/@memory.ImagePath"
-                                            class="w-100" style="height: 250px; object-fit: cover;"
-                                            alt="Memory"
-                                            onerror="this.src='/images/placeholder.png';" />
-                                        }
+                                        @if (!string.IsNullOrEmpty(memory.ImagePath))
+                                         {
+                                        @* <img src="/uploads/images/@memory.ImagePath" *@
+                                        @*         class="w-100" style="height: 250px; object-fit: cover;" *@
+                                        @*         alt="Memory" *@
+                                        @*         onerror="this.src='/images/placeholder.png';" /> *@
+                                        <img src="/uploads/@memory.ImagePath" 
+                                             class="w-100" 
+                                             style="height: 250px; object-fit: cover;" 
+                                             alt="Memory" 
+                                             onerror="this.src='/images/placeholder.png';" />
+                                            }
 
-                                    <div class="p-4 bg-white">
-                                             <h5 class="fw-bold mb-1">@memory.Caption</h5>
-                                             <p class="text-muted small mb-3">@memory.CreatedAt.ToString("dd MMMM yyyy")</p>
-                        
-                                        @if (!string.IsNullOrEmpty(memory.AudioPath))
-                                              {
-                                    <div class="p-2 rounded-pill" style="background: #f8f9fa;">
-                                        <audio controls class="w-100" style="height: 35px;">
-                                            @* <source src="/uploads/audio/@memory.AudioPath" type="audio/mpeg"> *@
-                                            <source src="~/uploads/audio/@memory.AudioPath" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    </div>
-                                        }
+                                        <div class="p-4 bg-white">
+                                                 <h5 class="fw-bold mb-1">@memory.Caption</h5>
+                                                 <p class="text-muted small mb-3">@memory.CreatedAt.ToString("dd MMMM yyyy")</p>
+                            
+                                            @if (!string.IsNullOrEmpty(memory.AudioPath))
+                                                  {
+                                                      @* <div class="p-2 rounded-pill" style="background: #f8f9fa;"> *@
+                                                      @*     <audio controls class="w-100" style="height: 35px;"> *@
+                                                      @*         $1$ <source src="/uploads/audio/@memory.AudioPath" type="audio/mpeg"> #1# *@
+                                                      @*         $1$ <source src="~/uploads/audio/@memory.AudioPath" type="audio/mpeg"> #1# *@
+                                                      @*         <source src="/uploads/@memory.AudioPath" type="audio/mpeg"> *@
+                                                      @*         Your browser does not support the audio element. *@
+                                                      @*     </audio> *@
+                                                      @* </div> *@
+                                                      
+                                                      <div class="p-2 rounded-pill" style="background: #f8f9fa;">
+                                                          <audio controls class="w-100" style="height: 35px;">
+                                                              <source src="/uploads/@memory.AudioPath" type="audio/mpeg">
+                                                              Your browser does not support the audio element.
+                                                          </audio>
+                                                      </div>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            }
-                    </div>
+                                }
+                        </div>
                     }
                     
                 </div>

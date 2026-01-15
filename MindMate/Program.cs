@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MindMate.Data;
 using MindMate.Models;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +33,36 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
+// OLD 
+// app.UseRouting();
+//
+// app.UseAuthorization();
+//
+// // رررررر
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new PhysicalFileProvider(
+//         Path.Combine(builder.Environment.WebRootPath, "uploads")),
+//     RequestPath = "/uploads"
+// });
+
+// 1. تعريف أنواع الملفات لضمان عمل الصوت على الآيفون وسفاري
+var provider = new FileExtensionContentTypeProvider();
+provider.Mappings[".mp3"] = "audio/mpeg";
+
+// 2. تفعيل الملفات الثابتة بشكل موحد وشامل لمجلد uploads
+app.UseStaticFiles(); // للملفات العادية في wwwroot
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads")),
+    RequestPath = "/uploads",
+    ContentTypeProvider = provider // هذا السطر هو مفتاح حل مشكلة العداد في سفاري
+});
+
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -44,5 +74,6 @@ app.MapControllerRoute(
 
 app.MapRazorPages()
    .WithStaticAssets();
+
 
 app.Run();

@@ -54,10 +54,10 @@ function initAudioRecorder(options = {}) {
 
     if (!recordBtn) return;
 
-    recordBtn.addEventListener('click', async () => {
+    recordBtn.addEventListener('click', async () => { //
         if (!mediaRecorder || mediaRecorder.state === "inactive") {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); //
                 mediaRecorder = new MediaRecorder(stream);
                 audioChunks = [];
 

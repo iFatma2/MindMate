@@ -90,12 +90,12 @@ namespace MindMate.Controllers
                         ModelState.AddModelError("", "Format not supported for images.");
                         return View(memoryRecord);
                     }
-                    memoryRecord.ImagePath = await SaveFile(imageFile, "images");
+                    memoryRecord.ImagePath = await SaveFile(imageFile, "images"); //
                 }
 
                 if (VoiceFile != null)
                 {
-                    memoryRecord.AudioPath = await SaveFile(VoiceFile, "audio");
+                    memoryRecord.AudioPath = await SaveFile(VoiceFile, "audio"); //
                 }
 
                 memoryRecord.CreatedAt = DateTime.Now;
@@ -192,7 +192,8 @@ namespace MindMate.Controllers
         private async Task<string> SaveFile(IFormFile file, string subFolder)
         {
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            string folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", subFolder);
+            //string folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", subFolder);
+            string folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
             if (!Directory.Exists(folderPath))
             {

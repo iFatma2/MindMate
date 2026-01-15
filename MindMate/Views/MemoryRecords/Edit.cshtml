@@ -16,7 +16,10 @@
 
                 <div class="text-center mb-4">
                     @if (!string.IsNullOrEmpty(Model.ImagePath)) {
-                        <img src="~/uploads/images/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" alt=""/>
+                        @* <img src="~/uploads/images/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" alt=""/> *@
+                        <img src="/uploads/@Model.ImagePath" class="rounded shadow-sm mb-2" style="height: 150px; width: 150px; object-fit: cover;" alt=""/>
+
+
                     }
                 </div>
 
@@ -38,7 +41,9 @@
                         <div id="currentAudioContainer" class="mb-3 p-2 border rounded bg-light">
                             <small class="text-muted d-block mb-1">Current Recording:</small>
                             <audio controls class="w-100" style="height: 35px;">
-                                <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg">
+                                @* <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg"> *@
+                                <source src="/uploads/@Model.AudioPath" type="audio/mpeg">
+
                             </audio>
                         </div>
                     }

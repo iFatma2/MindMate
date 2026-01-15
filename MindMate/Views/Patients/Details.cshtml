@@ -53,11 +53,14 @@
 
         // For testing website under development #
         //var myIP = "10.20.65.137"; 
-        var myIP = "192.168.8.105"; 
-        var port = "5112"; 
-        var publicUrl = "http://" + myIP + ":" + port + "/Patients/PublicDashboard?token=" + "@Model.AccessToken";
+        //var myIP = "192.168.8.105"; 
+        //var port = "5112"; 
+        //var publicUrl = "http://" + myIP + ":" + port + "/Patients/PublicDashboard?token=" + "@Model.AccessToken";
 
         // -------------------------------------------------------------------------
+
+        var publicUrl = window.location.origin + "/Patients/PublicDashboard?token=" + "@Model.AccessToken";
+        
         new QRCode(document.getElementById("qrcode"), {
             text: publicUrl,
             width: 160,

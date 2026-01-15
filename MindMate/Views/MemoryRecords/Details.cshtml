@@ -8,7 +8,9 @@
 
         <div class="mindmate-card mx-auto p-0 overflow-hidden shadow-lg" style="max-width: 800px;">
             @if (!string.IsNullOrEmpty(Model.ImagePath)) {
-                <img src="~/uploads/images/@Model.ImagePath" class="w-100" style="max-height: 500px; object-fit: cover;" />
+                @* <img src="~/uploads/images/@Model.ImagePath" class="w-100" style="max-height: 500px; object-fit: cover;" /> *@
+                <img src="/uploads/@Model.ImagePath" class="w-100" style="max-height: 500px; object-fit: cover;" />
+
             }
             
             <div class="p-5 text-center">
@@ -18,7 +20,8 @@
                     <div class="mindmate-bg-light p-4 rounded-pill d-inline-block w-100 mb-4" style="background-color: var(--mindmate-bg-light);">
                         <label class="d-block mb-2 small fw-bold text-muted"><i class="bi bi-mic-fill"></i> Voice Recording</label>
                         <audio controls class="w-100">
-                            <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg">
+                            @* <source src="~/uploads/audio/@Model.AudioPath" type="audio/mpeg"> *@
+                            <source src="/uploads/@Model.AudioPath" type="audio/mpeg">
                         </audio>
                     </div>
                 }
